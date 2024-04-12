@@ -1,4 +1,3 @@
-import "package:flutter_riverpod/flutter_riverpod.dart";
 import "screens/app_screens.dart";
 
 void main() {

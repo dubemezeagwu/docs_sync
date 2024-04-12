@@ -10,21 +10,32 @@ class LoginScreen extends ConsumerWidget {
     return Scaffold(
       body: Center(
         child: ElevatedButton.icon(
-          onPressed: () => signInWithGoogle(ref),
+          onPressed: () => signInWithGoogle(ref,context),
           icon: SvgPicture.asset(
             "svg/google.svg",
             height: 20,
             width: 20,
           ),
-          label: Text("Sign In with Google!"),
+          label: const Text("Sign In with Google!"),
           style: ElevatedButton.styleFrom(
               backgroundColor: kWhite, minimumSize: const Size(150, 50)),
         ),
       ),
     );
   }
+
+  // TODO: Fix navigation bug. Not navigating to next screen after signup
   
-  void signInWithGoogle(WidgetRef ref) {
-    ref.read(authRepositoryProvider).signInWithGoogle();
+  void signInWithGoogle(WidgetRef ref, BuildContext context) async {
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
+    final navigator = Navigator.of(context);
+    final data = await ref.read(authRepositoryProvider).signInWithGoogle();
+    if (data.errorMessage == null) {
+      ref.read(userProvider.notifier).update((state) => data.data);
+      navigator.push(MaterialPageRoute(builder: (context) => const HomeScreen()));
+    } else {
+      scaffoldMessenger
+          .showSnackBar(SnackBar(content: Text(data.errorMessage!)));
+    }
   }
 }
