@@ -11,6 +11,9 @@ on:
       - dev
       - test
       - main
+defaults:
+  run:
+    working-directory: ./app
 jobs:
   build:
     name: Build and Release
