@@ -12,7 +12,7 @@ class LoginScreen extends ConsumerWidget {
         child: ElevatedButton.icon(
           onPressed: () => signInWithGoogle(ref,context),
           icon: SvgPicture.asset(
-            "svg/google.svg",
+            "assets/svg/google.svg", 
             height: 20,
             width: 20,
           ),

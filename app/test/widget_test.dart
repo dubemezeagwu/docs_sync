@@ -10,6 +10,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:docs_sync/main.dart';
 
+// TODO 3.1: 
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
     int expectedNumber = 1;
