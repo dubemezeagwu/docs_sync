@@ -12,7 +12,6 @@ class LoginScreen extends ConsumerWidget {
     return Scaffold(
       body: Center(
         child: ElevatedButton.icon(
-          // onPressed: () => context.goNamed(AppRoutes.home),
           onPressed: () => signInWithGoogle(ref, context),
           icon: SvgPicture.asset(
             "assets/svg/google.svg",
