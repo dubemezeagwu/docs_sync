@@ -1,4 +1,5 @@
 export "package:flutter/material.dart";
+export "package:flutter/widgets.dart";
 
 export "package:docs_sync/core/constants/color_constants.dart";
 export "package:docs_sync/core/constants/enums.dart";

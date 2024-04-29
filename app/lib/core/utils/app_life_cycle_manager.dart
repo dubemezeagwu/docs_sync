@@ -1,4 +1,4 @@
-import 'package:flutter/widgets.dart';
+import "package:docs_sync/core/app_core.dart";
 
 class AppLifeCycleManager extends StatefulWidget {
   final Widget child;

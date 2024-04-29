@@ -8,7 +8,7 @@ class HomeScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       body: Center(
-        child: Text(ref.watch(userProvider)!.email.toString()),
+        child: Text(ref.watch(userProvider)?.email.toString() ?? "Docs Sync"),
       ),
     );
   }

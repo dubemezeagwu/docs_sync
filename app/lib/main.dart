@@ -1,3 +1,4 @@
+import "package:docs_sync/core/routes/router.dart";
 import "package:docs_sync/core/utils/app_life_cycle_manager.dart";
 
 import "screens/app_screens.dart";
@@ -18,13 +19,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppLifeCycleManager(
-      child: MaterialApp(
+      child: MaterialApp.router(
           title: 'Docs Sync',
           theme: ThemeData(
             colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
             useMaterial3: true,
           ),
-          home: const LoginScreen()),
+          routerConfig:  AppNavigator.router),
     );
   }
 }
