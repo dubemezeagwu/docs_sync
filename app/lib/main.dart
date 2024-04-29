@@ -1,3 +1,6 @@
+import "package:docs_sync/core/routes/router.dart";
+import "package:docs_sync/core/utils/app_life_cycle_manager.dart";
+
 import "screens/app_screens.dart";
 
 void main() {
@@ -15,12 +18,14 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        title: 'Docs Sync',
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-          useMaterial3: true,
-        ),
-        home: const LoginScreen());
+    return AppLifeCycleManager(
+      child: MaterialApp.router(
+          title: 'Docs Sync',
+          theme: ThemeData(
+            colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+            useMaterial3: true,
+          ),
+          routerConfig:  AppNavigator.router),
+    );
   }
 }

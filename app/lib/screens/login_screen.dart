@@ -1,6 +1,8 @@
 import 'package:docs_sync/core/app_core.dart';
+import 'package:docs_sync/core/routes/app_routes.dart';
 import 'package:docs_sync/repository/auth_repository.dart';
 import 'package:docs_sync/screens/app_screens.dart';
+import 'package:go_router/go_router.dart';
 
 class LoginScreen extends ConsumerWidget {
   const LoginScreen({super.key});
@@ -10,9 +12,10 @@ class LoginScreen extends ConsumerWidget {
     return Scaffold(
       body: Center(
         child: ElevatedButton.icon(
-          onPressed: () => signInWithGoogle(ref,context),
+          // onPressed: () => context.goNamed(AppRoutes.home),
+          onPressed: () => signInWithGoogle(ref, context),
           icon: SvgPicture.asset(
-            "assets/svg/google.svg", 
+            "assets/svg/google.svg",
             height: 20,
             width: 20,
           ),
@@ -24,15 +27,13 @@ class LoginScreen extends ConsumerWidget {
     );
   }
 
-  // TODO: Fix navigation bug. Not navigating to next screen after signup
-  
   void signInWithGoogle(WidgetRef ref, BuildContext context) async {
     final scaffoldMessenger = ScaffoldMessenger.of(context);
-    final navigator = Navigator.of(context);
     final data = await ref.read(authRepositoryProvider).signInWithGoogle();
     if (data.errorMessage == null) {
       ref.read(userProvider.notifier).update((state) => data.data);
-      navigator.push(MaterialPageRoute(builder: (context) => const HomeScreen()));
+      if (!context.mounted) return;
+      context.goNamed(AppRoutes.home);
     } else {
       scaffoldMessenger
           .showSnackBar(SnackBar(content: Text(data.errorMessage!)));
