@@ -39,7 +39,10 @@ class AuthRepository {
       switch (response.statusCode) {
         case 201:
           final user =
-              newUser.copyWith(uid: jsonDecode(response.body)["data"]["user"]["_id"]);
+              newUser.copyWith(
+                uid: jsonDecode(response.body)["data"]["user"]["_id"],
+                token: jsonDecode(response.body)["token"]
+                );
           data = NetworkResponse(data: user, status: true);
       }
     } catch (e) {
