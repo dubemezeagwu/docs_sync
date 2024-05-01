@@ -36,7 +36,7 @@ class AuthRepository {
       final User newUser = User(
         email: userAccount!.email,
         name: userAccount.displayName!,
-        profilePicture: userAccount.photoUrl!,
+        profilePicture: userAccount.photoUrl ?? "",
         uid: "",
       );
 

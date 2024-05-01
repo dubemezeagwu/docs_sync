@@ -28,7 +28,7 @@ class _MyAppState extends ConsumerState<MyApp> {
     if (data.data != null) {
       ref.read(userProvider.notifier).update((state) => data.data);
     } else {
-      
+
     }
   }
 
@@ -43,6 +43,7 @@ class _MyAppState extends ConsumerState<MyApp> {
             colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
             useMaterial3: true,
           ),
+          debugShowCheckedModeBanner: false,
           routerConfig: goRouter,
           ),
     );
