@@ -26,7 +26,7 @@ class AppNavigator {
           ),
         ],
         redirect: (context, state) {
-          final isAuthenticated = ref.read(userProvider);
+          final isAuthenticated = ref.watch(userProvider);
           return (isAuthenticated == null) ? "/" : "/home";
         });
   });
