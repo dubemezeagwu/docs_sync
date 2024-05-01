@@ -79,7 +79,7 @@ exports.protect = catchAsync(async (req, res, next) => {
   );
 
   // 3) Check if user still exists
-  const freshUser = await User.findById(decoded.id);
+  const freshUser = await User.findById(decoded.id).select("-__v");
   if (!freshUser) {
     return next(
       new AppError(
