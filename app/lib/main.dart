@@ -1,5 +1,6 @@
 import "package:docs_sync/core/routes/router.dart";
 import "package:docs_sync/core/utils/app_life_cycle_manager.dart";
+import "package:docs_sync/domain/user_state.dart";
 import "package:docs_sync/repository/auth_repository.dart";
 
 import "screens/app_screens.dart";
@@ -27,9 +28,12 @@ class _MyAppState extends ConsumerState<MyApp> {
     final data = await ref.read(authRepositoryProvider).getUserData();
     if (data.data != null) {
       ref.read(userProvider.notifier).update((state) => data.data);
-    } else {
-
     }
+  }
+
+  void signOut(WidgetRef ref) async {
+    ref.read(authRepositoryProvider).signOut();
+    ref.read(userProvider.notifier).update((state) => null);
   }
 
   // This widget is the root of your application.
@@ -38,14 +42,14 @@ class _MyAppState extends ConsumerState<MyApp> {
     final goRouter = ref.watch(AppNavigator.goRouterProvider);
     return AppLifeCycleManager(
       child: MaterialApp.router(
-          title: 'Docs Sync',
-          theme: ThemeData(
-            colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-            useMaterial3: true,
-          ),
-          debugShowCheckedModeBanner: false,
-          routerConfig: goRouter,
-          ),
+        title: 'Docs Sync',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          useMaterial3: true,
+        ),
+        debugShowCheckedModeBanner: false,
+        routerConfig: goRouter,
+      ),
     );
   }
 }

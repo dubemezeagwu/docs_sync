@@ -1,5 +1,6 @@
 import 'package:docs_sync/core/app_core.dart';
 import 'package:docs_sync/core/routes/app_routes.dart';
+import 'package:docs_sync/domain/user_state.dart';
 import 'package:docs_sync/repository/auth_repository.dart';
 import 'package:docs_sync/screens/app_screens.dart';
 import 'package:go_router/go_router.dart';
@@ -31,7 +32,9 @@ class LoginScreen extends ConsumerWidget {
     final scaffoldMessenger = ScaffoldMessenger.of(context);
     final data = await ref.read(authRepositoryProvider).signInWithGoogle();
     if (data.errorMessage == null) {
-      ref.read(userProvider.notifier).update((state) => data.data);
+      ref
+          .read(userProvider.notifier)
+          .update((state) => data.data);
       if (!context.mounted) return;
       context.goNamed(AppRoutes.home);
     } else {

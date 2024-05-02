@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:docs_sync/core/constants/api_constants.dart';
 import 'package:docs_sync/domain/app_domain.dart';
+import 'package:docs_sync/domain/user_state.dart';
 import 'package:docs_sync/repository/local_storage_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -14,6 +15,20 @@ final authRepositoryProvider = Provider((ref) => AuthRepository(
     localStorageRepository: LocalStorageRepository()));
 
 final userProvider = StateProvider<User?>((ref) => null);
+
+// final userFutureProvider = FutureProvider<User>((ref) async {
+//   try {
+//     final data = await ref.read(authRepositoryProvider).getUserData();
+//     if (data.data!= null) {
+//       ref.read(userProvider.notifier).state = data.data;
+//       return data;
+//     } else {
+//       throw Exception("User data not found");
+//     }
+//   } catch (e) {
+//     throw Exception(e.toString());
+//   }
+// });
 
 class AuthRepository {
   final GoogleSignIn _googleSignIn;
@@ -60,7 +75,6 @@ class AuthRepository {
     return data;
   }
 
-
   Future<NetworkResponse<User>> getUserData() async {
     NetworkResponse<User> data = NetworkResponse(
         status: false, data: null, errorMessage: "Unexpected Error occurred");
@@ -90,5 +104,10 @@ class AuthRepository {
       throw (e.toString());
     }
     return data;
+  }
+
+  void signOut() async {
+    _googleSignIn.signOut();
+    _localStorageRepository.deleteToken();
   }
 }

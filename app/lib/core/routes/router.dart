@@ -9,25 +9,26 @@ class AppNavigator {
   // Go Router Configuration
   static final goRouterProvider = Provider<GoRouter>((ref) {
     return GoRouter(
-        routes: <GoRoute>[
-          GoRoute(
-            path: "/",
-            name: AppRoutes.login,
-            builder: (context, state) {
-              return const LoginScreen();
-            },
-          ),
-          GoRoute(
-            path: "/home",
-            name: AppRoutes.home,
-            builder: (context, state) {
-              return const HomeScreen();
-            },
-          ),
-        ],
-        redirect: (context, state) {
-          final isAuthenticated = ref.watch(userProvider);
-          return (isAuthenticated == null) ? "/" : "/home";
-        });
+      routes: <GoRoute>[
+        GoRoute(
+          path: "/",
+          name: AppRoutes.login,
+          builder: (context, state) {
+            return const LoginScreen();
+          },
+        ),
+        GoRoute(
+          path: "/home",
+          name: AppRoutes.home,
+          builder: (context, state) {
+            return const HomeScreen();
+          },
+        ),
+      ],
+      redirect: (context, state) {
+        final isAuthenticated = ref.watch(userProvider);
+        return (isAuthenticated == null) ? "/" : "/home";
+      },
+    );
   });
 }
