@@ -16,6 +16,8 @@ final authRepositoryProvider = Provider((ref) => AuthRepository(
 
 final userProvider = StateProvider<User?>((ref) => null);
 
+final appStatusProvider = StateProvider<bool>((ref) => false);
+
 // final userFutureProvider = FutureProvider<User>((ref) async {
 //   try {
 //     final data = await ref.read(authRepositoryProvider).getUserData();

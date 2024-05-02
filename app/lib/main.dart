@@ -21,19 +21,19 @@ class _MyAppState extends ConsumerState<MyApp> {
   @override
   void initState() {
     super.initState();
-    getUserData(ref);
+     WidgetsBinding.instance.addPostFrameCallback((_) {
+      getUserData(ref);
+    });
   }
 
   void getUserData(WidgetRef ref) async {
+    ref.read(appStatusProvider.notifier).update((state) => true);
     final data = await ref.read(authRepositoryProvider).getUserData();
     if (data.data != null) {
       ref.read(userProvider.notifier).update((state) => data.data);
     }
-  }
+    ref.read(appStatusProvider.notifier).update((state) => false);
 
-  void signOut(WidgetRef ref) async {
-    ref.read(authRepositoryProvider).signOut();
-    ref.read(userProvider.notifier).update((state) => null);
   }
 
   // This widget is the root of your application.
