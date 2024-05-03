@@ -6,7 +6,7 @@ exports.createDocument = catchAsync(async (req, res, next) => {
   const { createdAt } = req.body;
 
   const document = await Document.create({
-    uid: req.user,
+    uid: req.user.id,
     title: "Untitled Document",
     createdAt: createdAt,
   });

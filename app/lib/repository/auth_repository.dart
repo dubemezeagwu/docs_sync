@@ -3,7 +3,6 @@ import 'dart:convert';
 
 import 'package:docs_sync/core/constants/api_constants.dart';
 import 'package:docs_sync/domain/app_domain.dart';
-import 'package:docs_sync/domain/user_state.dart';
 import 'package:docs_sync/repository/local_storage_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';

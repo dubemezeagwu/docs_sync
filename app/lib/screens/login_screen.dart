@@ -1,6 +1,5 @@
 import 'package:docs_sync/core/app_core.dart';
 import 'package:docs_sync/core/routes/app_routes.dart';
-import 'package:docs_sync/domain/user_state.dart';
 import 'package:docs_sync/repository/auth_repository.dart';
 import 'package:docs_sync/screens/app_screens.dart';
 import 'package:go_router/go_router.dart';

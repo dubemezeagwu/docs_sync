@@ -14,8 +14,8 @@ class DocumentRepository {
 
   DocumentRepository({required Client client}) : _client = client;
 
-  Future<NetworkResponse> createDocument(String token) async {
-    NetworkResponse data = NetworkResponse(
+  Future<NetworkResponse<Document>> createDocument(String token) async {
+    NetworkResponse<Document> data = NetworkResponse(
         status: false, data: null, errorMessage: "Unexpected Error occurred");
 
     try {

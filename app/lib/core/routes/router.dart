@@ -10,7 +10,13 @@ class AppNavigator {
   // Go Router Configuration
   static final goRouterProvider = Provider<GoRouter>((ref) {
     final appStatus = ref.watch(appStatusProvider);
+    final isAuthenticated = ref.watch(userProvider);
     return GoRouter(
+      initialLocation: (appStatus == true)
+          ? "/loading"
+          : (isAuthenticated == null)
+              ? "/"
+              : "/home",
       routes: <GoRoute>[
         GoRoute(
           path: "/",
@@ -42,14 +48,6 @@ class AppNavigator {
           },
         ),
       ],
-      redirect: (context, state) {
-        final isAuthenticated = ref.watch(userProvider);
-        return (appStatus == true)
-            ? "/loading"
-            : (isAuthenticated == null)
-                ? "/"
-                : "/home";
-      },
     );
   });
 }

@@ -54,12 +54,10 @@ class HomeScreen extends ConsumerWidget {
         await ref.read(documentRepositoryProvider).createDocument(token ?? "");
     if (doc.data != null) {
       if (!context.mounted) return;
-      context.push("/document/${doc.data.id}");
+      context.push("/document/${doc.data?.id}");
     } else {
       scaffoldMessenger.showSnackBar(
           SnackBar(content: Text(doc.errorMessage ?? "Unexpected Error")));
     }
-
-    context.pushNamed(AppRoutes.document);
   }
 }
