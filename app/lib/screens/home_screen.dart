@@ -5,6 +5,7 @@ import "package:docs_sync/domain/models/network_response.dart";
 import "package:docs_sync/repository/auth_repository.dart";
 import "package:docs_sync/repository/document_repository.dart";
 import "package:docs_sync/repository/local_storage_repository.dart";
+import "package:docs_sync/screens/widgets/document_list_widget.dart";
 import "package:go_router/go_router.dart";
 import "app_screens.dart";
 
@@ -47,12 +48,9 @@ class HomeScreen extends ConsumerWidget {
                 itemCount: documents.data!.length,
                 itemBuilder: (context, index) {
                   final document = documents.data?[index];
-                  return ListTile(
-                    title: Text(document?.title ??
-                        "Document One"),
-                    subtitle:
-                        Text("Hello World"),
-                  );
+                  return DocumentListWidget(
+                      title: document?.title ?? "Document One",
+                      subtitle: "Hello World");
                 },
               );
             } else {
