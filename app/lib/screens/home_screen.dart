@@ -1,4 +1,7 @@
+import "package:docs_sync/core/constants/color_constants.dart";
 import "package:docs_sync/core/routes/app_routes.dart";
+import "package:docs_sync/domain/models/document_model.dart";
+import "package:docs_sync/domain/models/network_response.dart";
 import "package:docs_sync/repository/auth_repository.dart";
 import "package:docs_sync/repository/document_repository.dart";
 import "package:docs_sync/repository/local_storage_repository.dart";
@@ -11,6 +14,7 @@ class HomeScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final userData = ref.watch(userProvider);
+    final documents = ref.watch(documentsFutureProvider);
     return Scaffold(
       appBar: MainAppBar(
         leading: Padding(
@@ -36,7 +40,34 @@ class HomeScreen extends ConsumerWidget {
         ],
       ),
       body: Center(
-        child: Text(userData?.email.toString() ?? "Docs Sync"),
+        child: documents.when(
+          data: ((documents) {
+            if (documents.data!.isNotEmpty && documents.data != null) {
+              return ListView.builder(
+                itemCount: documents.data!.length,
+                itemBuilder: (context, index) {
+                  final document = documents.data?[index];
+                  return ListTile(
+                    title: Text(document?.title ??
+                        "Document One"),
+                    subtitle:
+                        Text("Hello World"),
+                  );
+                },
+              );
+            } else {
+              return const Text("No documents available");
+            }
+          }),
+          error: ((error, stackTrace) {
+            return const Center(child: Text("Error Occurred!"));
+          }),
+          loading: (() {
+            return const Expanded(
+              child: Center(child: CircularProgressIndicator()),
+            );
+          }),
+        ),
       ),
     );
   }

@@ -10,4 +10,10 @@ router.post(
   documentController.createDocument,
 );
 
+router.get(
+  "/docs/me",
+  authController.protect,
+  documentController.getUserDocuments,
+);
+
 module.exports = router;

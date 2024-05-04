@@ -8,8 +8,8 @@ class Document {
   final List content;
   final String id;
 
-  Document({
-      required this.title,
+  Document(
+      {required this.title,
       required this.uid,
       required this.createdAt,
       required this.content,
@@ -27,18 +27,19 @@ class Document {
 
   factory Document.fromMap(Map<String, dynamic> map) {
     return Document(
-      title: map['title'] as String,
-      id: map['_id'] as String,
-      uid: map['uid'] as String,
-      createdAt: DateTime.fromMillisecondsSinceEpoch(map['createdAt'] as int),
-      content: List.from((map['content'] as List),
-      )
-    );
+        title: map['title'] as String,
+        id: map['_id'] as String,
+        uid: map['uid'] as String,
+        createdAt: DateTime.fromMillisecondsSinceEpoch(map['createdAt'] as int),
+        content: List.from(
+          (map['content'] as List),
+        ));
   }
 
   String toJson() => json.encode(toMap());
 
-  factory Document.fromJson(String source) => Document.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory Document.fromJson(Map<String, dynamic> source) =>
+      Document.fromMap(source);
 
   Document copyWith({
     String? title,

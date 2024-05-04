@@ -17,20 +17,6 @@ final userProvider = StateProvider<User?>((ref) => null);
 
 final appStatusProvider = StateProvider<bool>((ref) => false);
 
-// final userFutureProvider = FutureProvider<User>((ref) async {
-//   try {
-//     final data = await ref.read(authRepositoryProvider).getUserData();
-//     if (data.data!= null) {
-//       ref.read(userProvider.notifier).state = data.data;
-//       return data;
-//     } else {
-//       throw Exception("User data not found");
-//     }
-//   } catch (e) {
-//     throw Exception(e.toString());
-//   }
-// });
-
 class AuthRepository {
   final GoogleSignIn _googleSignIn;
   final Client _client;

@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 final localStorageProvider = Provider((ref) => LocalStorageRepository());
 
+
 class LocalStorageRepository {
   static const _tokenKey = 'jwt_token';
 
