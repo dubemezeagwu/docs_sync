@@ -16,4 +16,15 @@ router.get(
   documentController.getUserDocuments,
 );
 
+router.patch(
+  "/docs/updateTitle",
+  authController.protect,
+  documentController.updateDocumentTitle,
+);
+
+router.get(
+  "/docs/:id",
+  authController.protect,
+  documentController.getDocumentById,
+);
 module.exports = router;

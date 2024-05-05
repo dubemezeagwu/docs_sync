@@ -1,3 +1,4 @@
+import "package:docs_sync/core/constants/color_constants.dart";
 import "package:docs_sync/core/routes/router.dart";
 import "package:docs_sync/core/utils/app_life_cycle_manager.dart";
 import "package:docs_sync/domain/user_state.dart";
@@ -40,15 +41,18 @@ class _MyAppState extends ConsumerState<MyApp> {
   @override
   Widget build(BuildContext context) {
     final goRouter = ref.watch(AppNavigator.goRouterProvider);
-    return AppLifeCycleManager(
-      child: MaterialApp.router(
-        title: 'Docs Sync',
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-          useMaterial3: true,
+    return GestureDetector(
+      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+      child: AppLifeCycleManager(
+        child: MaterialApp.router(
+          title: 'Docs Sync',
+          theme: ThemeData(
+            colorScheme: ColorScheme.fromSeed(seedColor: kPrimary),
+            useMaterial3: true,
+          ),
+          debugShowCheckedModeBanner: false,
+          routerConfig: goRouter,
         ),
-        debugShowCheckedModeBanner: false,
-        routerConfig: goRouter,
       ),
     );
   }

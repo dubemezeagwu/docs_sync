@@ -82,4 +82,67 @@ class DocumentRepository {
     }
     return data;
   }
+
+  void updateDocumentTitle(
+      {required String token,
+      required String id,
+      required String title}) async {
+    NetworkResponse<Document> data = NetworkResponse(
+        status: false, data: null, errorMessage: "Unexpected Error occurred");
+
+    try {
+      var response = await _client.patch(
+        Uri.parse("$host/api/v1/docs/updateTitle"),
+        body: jsonEncode({
+          "title": title,
+          "id": id,
+        }),
+        headers: {
+          "Content-Type": "application/json; charset=UTF-8",
+          "Authorization": "Bearer $token"
+        },
+      );
+
+      switch (response.statusCode) {
+        case 200:
+          final body = jsonDecode(response.body);
+          final documentJson = body["data"]["document"];
+          final document = Document.fromJson(documentJson);
+          data = NetworkResponse(data: document, status: true);
+      }
+    } catch (e) {
+      data = NetworkResponse(
+          status: false, data: null, errorMessage: e.toString());
+      throw (e.toString());
+    }
+  }
+
+  Future<NetworkResponse<Document>> getDocumentById(
+      String token, String id) async {
+    NetworkResponse<Document> data = NetworkResponse(
+        status: false, data: null, errorMessage: "Unexpected Error occurred");
+
+    try {
+      var response = await _client.get(
+        Uri.parse("$host/api/v1/docs/$id"),
+        headers: {
+          "Content-Type": "application/json; charset=UTF-8",
+          "Authorization": "Bearer $token"
+        },
+      );
+
+      switch (response.statusCode) {
+        case 200:
+          final body = jsonDecode(response.body);
+          final documentJson = body["data"]["document"];
+          final document = Document.fromJson(documentJson);
+          data = NetworkResponse(data: document, status: true);
+      }
+    } catch (e) {
+      data = NetworkResponse(
+          status: false, data: null, errorMessage: e.toString());
+      throw (e.toString());
+    }
+    return data;
+  }
 }

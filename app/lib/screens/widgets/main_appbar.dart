@@ -29,8 +29,8 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
         constraints: const BoxConstraints(maxHeight: 28, maxWidth: 300),
         child: Text(
           style: TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w400
+            fontSize: 18,
+            fontWeight: FontWeight.w600
           ),
           title,
         ),

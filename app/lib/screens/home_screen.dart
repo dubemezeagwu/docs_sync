@@ -48,9 +48,12 @@ class HomeScreen extends ConsumerWidget {
                 itemCount: documents.data!.length,
                 itemBuilder: (context, index) {
                   final document = documents.data?[index];
-                  return DocumentListWidget(
-                      title: document?.title ?? "Document One",
-                      subtitle: "Hello World");
+                  return InkWell(
+                    onTap: () => navigateToDocument(context,document?.id ?? "0"),
+                    child: DocumentListWidget(
+                        title: document?.title ?? "Document One",
+                        subtitle: "Hello World"),
+                  );
                 },
               );
             } else {
@@ -88,5 +91,9 @@ class HomeScreen extends ConsumerWidget {
       scaffoldMessenger.showSnackBar(
           SnackBar(content: Text(doc.errorMessage ?? "Unexpected Error")));
     }
+  }
+
+  void navigateToDocument (BuildContext context, String documentId, ) {
+    context.push("/document/$documentId");
   }
 }
