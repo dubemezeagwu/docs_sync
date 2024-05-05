@@ -1,5 +1,6 @@
 const dotenv = require("dotenv");
 const app = require("./app");
+const http = require("http");
 const mongoose = require("mongoose");
 
 process.on("uncaughtException", (err) => {
@@ -14,6 +15,9 @@ const database = process.env.DATABASE.replace(
   process.env.DATABASE_PASSWORD,
 );
 
+var socketServer = http.createServer(app);
+var io = require("socket.io")(socketServer);
+
 mongoose
   .connect(database, {})
   .then((con) => {
@@ -24,8 +28,15 @@ mongoose
     console.log(err);
   });
 
+io.on("connection", (socket) => {
+  socket.on("join", (documentId) => {
+    socket.join(documentId);
+    console.log("joined!");
+  });
+});
+
 const port = process.env.PORT || 3001;
-const server = app.listen(port, "0.0.0.0", () => {
+const server = socketServer.listen(port, "0.0.0.0", () => {
   console.log(`App is running on port ${port}`);
 });
 

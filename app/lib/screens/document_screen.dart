@@ -2,6 +2,7 @@ import 'package:docs_sync/core/constants/color_constants.dart';
 import 'package:docs_sync/domain/models/document_model.dart';
 import 'package:docs_sync/repository/document_repository.dart';
 import 'package:docs_sync/repository/local_storage_repository.dart';
+import 'package:docs_sync/repository/socket_repository.dart';
 import 'package:docs_sync/screens/app_screens.dart';
 import 'package:flutter_quill/flutter_quill.dart' as quill;
 import 'package:go_router/go_router.dart';
@@ -23,10 +24,12 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
       TextEditingController(text: "");
   final quill.QuillController _quillController = quill.QuillController.basic();
   Document? document;
+  SocketRepository socketRepository = SocketRepository();
 
   @override
   void initState() {
     super.initState();
+    socketRepository.joinRoom(widget.id);
     fetchDocumentData(ref);
   }
 
