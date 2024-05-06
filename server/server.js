@@ -33,6 +33,10 @@ io.on("connection", (socket) => {
     socket.join(documentId);
     console.log("joined!");
   });
+
+  socket.on("typing", (data) => {
+    socket.broadcast(data.room).emit("changes", data);
+  });
 });
 
 const port = process.env.PORT || 3001;

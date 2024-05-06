@@ -22,7 +22,7 @@ class DocumentScreen extends ConsumerStatefulWidget {
 class _DocumentScreenState extends ConsumerState<DocumentScreen> {
   final TextEditingController _titleController =
       TextEditingController(text: "");
-  final quill.QuillController _quillController = quill.QuillController.basic();
+  quill.QuillController? _quillController;
   Document? document;
   SocketRepository socketRepository = SocketRepository();
 
@@ -31,6 +31,14 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
     super.initState();
     socketRepository.joinRoom(widget.id);
     fetchDocumentData(ref);
+
+    socketRepository.onChangedListener((data) {
+      _quillController?.compose(
+          quill.Delta.fromJson(data["delta"]),
+          _quillController?.selection ??
+              const TextSelection.collapsed(offset: 0),
+          quill.ChangeSource.remote);
+    });
   }
 
   @override
@@ -55,12 +63,35 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
 
     if (data.data != null) {
       _titleController.text = (data.data as Document).title;
+      _quillController = quill.QuillController(
+          document: data.data!.content.isEmpty
+              ? quill.Document()
+              : quill.Document.fromDelta(
+                  quill.Delta.fromJson(data.data!.content)),
+          selection: const TextSelection.collapsed(offset: 0));
+      setState(() {});
     }
-    setState(() {});
+
+    _quillController?.document.changes.listen((event) {
+      if (event.source == quill.ChangeSource.local) {
+        Map<String, dynamic> map = {
+          "delta": event.change,
+          "room": widget.id,
+        };
+        socketRepository.typing(map);
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    if (_quillController == null) {
+      return const Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -113,9 +144,9 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
         padding: const EdgeInsets.all(16.0),
         child: quill.QuillProvider(
           configurations: quill.QuillConfigurations(
-            controller: _quillController,
+            controller: _quillController!,
             sharedConfigurations: const quill.QuillSharedConfigurations(
-              locale: Locale('de'),
+              locale: Locale('en'),
             ),
           ),
           child: Column(
