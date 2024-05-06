@@ -43,7 +43,7 @@ class HomeScreen extends ConsumerWidget {
       body: Center(
         child: documents.when(
           data: ((documents) {
-            if (documents.data!.isNotEmpty && documents.data != null) {
+            if (documents.data != null && documents.data!.isNotEmpty) {
               return ListView.builder(
                 itemCount: documents.data!.length,
                 itemBuilder: (context, index) {
