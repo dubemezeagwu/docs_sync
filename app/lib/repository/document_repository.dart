@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:docs_sync/core/constants/api_constants.dart';
@@ -62,7 +63,9 @@ class DocumentRepository {
           "Content-Type": "application/json; charset=UTF-8",
           "Authorization": "Bearer $token"
         },
-      );
+      ).timeout(const Duration(seconds: 10), onTimeout: () {
+        throw TimeoutException("The connection has timed out!");
+      });
 
       switch (response.statusCode) {
         case 200:

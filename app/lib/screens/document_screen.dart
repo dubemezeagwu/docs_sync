@@ -1,9 +1,12 @@
+import 'dart:async';
+
 import 'package:docs_sync/core/constants/color_constants.dart';
 import 'package:docs_sync/domain/models/document_model.dart';
 import 'package:docs_sync/repository/document_repository.dart';
 import 'package:docs_sync/repository/local_storage_repository.dart';
 import 'package:docs_sync/repository/socket_repository.dart';
 import 'package:docs_sync/screens/app_screens.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_quill/flutter_quill.dart' as quill;
 import 'package:go_router/go_router.dart';
 
@@ -38,6 +41,13 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
           _quillController?.selection ??
               const TextSelection.collapsed(offset: 0),
           quill.ChangeSource.remote);
+    });
+
+    Timer.periodic(const Duration(seconds: 2), (timer) {
+      socketRepository.autoSave(<String, dynamic>{
+        "delta": _quillController!.document.toDelta(),
+        "room": widget.id
+      });
     });
   }
 
@@ -95,7 +105,9 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          onPressed: () => context.pop(),
+          onPressed: () {
+            context.pop();
+          },
           icon: const Icon(Icons.arrow_back_ios_new),
         ),
         title: Row(
@@ -127,7 +139,14 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
           Padding(
             padding: const EdgeInsets.all(10.0),
             child: ElevatedButton.icon(
-                onPressed: () {},
+                onPressed: () {
+                  Clipboard.setData(ClipboardData(
+                          text:
+                              "http://localhost:3000/#/document/${widget.id}"))
+                      .then((value) => ScaffoldMessenger.of(context)
+                          .showSnackBar(
+                              const SnackBar(content: Text("Link copied!"))));
+                },
                 icon: const Icon(Icons.lock),
                 label: const Text("Share")),
           )

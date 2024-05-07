@@ -1,4 +1,5 @@
 import 'package:docs_sync/core/routes/app_routes.dart';
+import 'package:docs_sync/core/routes/navigator_observer.dart';
 import 'package:docs_sync/repository/auth_repository.dart';
 import 'package:docs_sync/screens/app_screens.dart';
 import 'package:docs_sync/screens/widgets/loading_screen.dart';
@@ -12,6 +13,7 @@ class AppNavigator {
     final appStatus = ref.watch(appStatusProvider);
     final isAuthenticated = ref.watch(userProvider);
     return GoRouter(
+      observers: [CustomNavigatorObserver(ref: ref)],
       initialLocation: (appStatus == true)
           ? "/loading"
           : (isAuthenticated == null)

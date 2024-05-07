@@ -9,11 +9,16 @@ import "package:docs_sync/screens/widgets/document_list_widget.dart";
 import "package:go_router/go_router.dart";
 import "app_screens.dart";
 
-class HomeScreen extends ConsumerWidget {
+class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends ConsumerState<HomeScreen> with RouteAware {
+  @override
+  Widget build(BuildContext context) {
     final userData = ref.watch(userProvider);
     final documents = ref.watch(documentsFutureProvider);
     return Scaffold(
@@ -49,7 +54,8 @@ class HomeScreen extends ConsumerWidget {
                 itemBuilder: (context, index) {
                   final document = documents.data?[index];
                   return InkWell(
-                    onTap: () => navigateToDocument(context,document?.id ?? "0"),
+                    onTap: () =>
+                        navigateToDocument(context, document?.id ?? "0"),
                     child: DocumentListWidget(
                         title: document?.title ?? "Document One",
                         subtitle: "Hello World"),
@@ -93,7 +99,10 @@ class HomeScreen extends ConsumerWidget {
     }
   }
 
-  void navigateToDocument (BuildContext context, String documentId, ) {
+  void navigateToDocument(
+    BuildContext context,
+    String documentId,
+  ) {
     context.push("/document/$documentId");
   }
 }

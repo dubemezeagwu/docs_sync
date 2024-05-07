@@ -2,6 +2,7 @@ const dotenv = require("dotenv");
 const app = require("./app");
 const http = require("http");
 const mongoose = require("mongoose");
+const Document = require("./models/documentModel");
 
 process.on("uncaughtException", (err) => {
   console.log(err.name, err.message);
@@ -37,7 +38,19 @@ io.on("connection", (socket) => {
   socket.on("typing", (data) => {
     socket.broadcast(data.room).emit("changes", data);
   });
+
+  socket.on("save", (data) => {
+    saveData(data);
+  });
 });
+
+const saveData = async (data) => {
+  await Document.findByIdAndUpdate(
+    data.room,
+    { content: data.delta },
+    { new: true },
+  );
+};
 
 const port = process.env.PORT || 3001;
 const server = socketServer.listen(port, "0.0.0.0", () => {
