@@ -1,5 +1,5 @@
-import 'package:docs_sync/screens/widgets/shadow_card.dart';
-import 'package:flutter/material.dart';
+import 'package:docs_sync/screens/app_screens.dart';
+
 
 class DocumentListWidget extends StatelessWidget {
   final String title;

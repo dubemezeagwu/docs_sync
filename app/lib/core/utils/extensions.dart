@@ -1,4 +1,4 @@
-import "package:docs_sync/core/app_core.dart";
+import 'package:docs_sync/screens/app_screens.dart';
 import "package:intl/intl.dart";
 
 extension BuildContextExtensions on BuildContext {

@@ -1,4 +1,3 @@
-import 'package:docs_sync/core/app_core.dart';
 import 'package:docs_sync/screens/app_screens.dart';
 
 class LoadingScreen extends StatelessWidget {

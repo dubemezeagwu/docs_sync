@@ -1,5 +1,4 @@
-import 'models/user_model.dart';
-
+import "app_domain.dart";
 class UserState {
   final bool loading;
   final User? user;

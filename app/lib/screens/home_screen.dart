@@ -1,13 +1,5 @@
-import "package:docs_sync/core/constants/color_constants.dart";
-import "package:docs_sync/core/routes/app_routes.dart";
-import "package:docs_sync/domain/models/document_model.dart";
-import "package:docs_sync/domain/models/network_response.dart";
-import "package:docs_sync/repository/auth_repository.dart";
-import "package:docs_sync/repository/document_repository.dart";
-import "package:docs_sync/repository/local_storage_repository.dart";
-import "package:docs_sync/screens/widgets/document_list_widget.dart";
-import "package:go_router/go_router.dart";
-import "app_screens.dart";
+import 'package:docs_sync/repository/app_repository.dart';
+import 'package:docs_sync/screens/app_screens.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});

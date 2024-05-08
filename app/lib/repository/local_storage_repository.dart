@@ -1,5 +1,4 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:docs_sync/repository/app_repository.dart';
 
 final localStorageProvider = Provider((ref) => LocalStorageRepository());
 

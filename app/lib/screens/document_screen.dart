@@ -1,14 +1,10 @@
 import 'dart:async';
 
-import 'package:docs_sync/core/constants/color_constants.dart';
-import 'package:docs_sync/domain/models/document_model.dart';
-import 'package:docs_sync/repository/document_repository.dart';
-import 'package:docs_sync/repository/local_storage_repository.dart';
-import 'package:docs_sync/repository/socket_repository.dart';
+import 'package:docs_sync/domain/app_domain.dart';
+import 'package:docs_sync/repository/app_repository.dart';
 import 'package:docs_sync/screens/app_screens.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_quill/flutter_quill.dart' as quill;
-import 'package:go_router/go_router.dart';
+
 
 class DocumentScreen extends ConsumerStatefulWidget {
   final String id;

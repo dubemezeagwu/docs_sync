@@ -1,5 +1,4 @@
-import 'package:docs_sync/services/socket_client.dart';
-import 'package:socket_io_client/socket_io_client.dart';
+import 'package:docs_sync/repository/app_repository.dart';
 
 class SocketRepository {
   final _socketClient = SocketClient.instance.socket!;

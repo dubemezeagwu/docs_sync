@@ -1,12 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:docs_sync/core/constants/api_constants.dart';
 import 'package:docs_sync/domain/app_domain.dart';
-import 'package:docs_sync/domain/models/document_model.dart';
-import 'package:docs_sync/repository/local_storage_repository.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:http/http.dart';
+import 'package:docs_sync/core/app_core.dart';
+import 'package:docs_sync/repository/app_repository.dart';
 
 final documentRepositoryProvider =
     Provider((ref) => DocumentRepository(client: Client()));

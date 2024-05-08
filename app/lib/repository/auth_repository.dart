@@ -1,12 +1,9 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
-import 'package:docs_sync/core/constants/api_constants.dart';
 import 'package:docs_sync/domain/app_domain.dart';
-import 'package:docs_sync/repository/local_storage_repository.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:http/http.dart';
+import 'package:docs_sync/core/app_core.dart';
+import 'package:docs_sync/repository/app_repository.dart';
 
 final authRepositoryProvider = Provider((ref) => AuthRepository(
     googleSignIn: GoogleSignIn(),

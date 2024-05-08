@@ -1,8 +1,7 @@
 import 'package:docs_sync/core/routes/app_routes.dart';
-import 'package:docs_sync/repository/document_repository.dart';
-import 'package:docs_sync/repository/local_storage_repository.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:docs_sync/screens/app_screens.dart';
+import 'package:docs_sync/repository/app_repository.dart';
+
 
 class CustomNavigatorObserver extends NavigatorObserver {
   final ProviderRef ref;

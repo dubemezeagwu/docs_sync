@@ -1,5 +1,4 @@
-import "package:docs_sync/core/constants/color_constants.dart";
-import "package:flutter/material.dart";
+import 'package:docs_sync/screens/app_screens.dart';
 
 class ShadowCard extends StatefulWidget {
   final Widget child;
