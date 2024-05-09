@@ -44,12 +44,18 @@ class AuthRepository {
           headers: {"Content-Type": "application/json; charset=UTF-8"});
 
       switch (response.statusCode) {
-        case 201:
+        case 200:
           final user = newUser.copyWith(
             uid: jsonDecode(response.body)["data"]["user"]["_id"],
           );
           data = NetworkResponse(data: user, status: true);
           _localStorageRepository.saveToken(jsonDecode(response.body)["token"]);
+        case 201:
+          final user = newUser.copyWith(
+            uid: jsonDecode(response.body)["data"]["user"]["_id"],
+          );
+          data = NetworkResponse(data: user, status: true);
+          _localStorageRepository.saveToken(jsonDecode(response.body)["token"]);  
       }
     } catch (e) {
       data = NetworkResponse(

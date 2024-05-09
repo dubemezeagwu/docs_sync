@@ -34,23 +34,18 @@ const createAndSendToken = (user, statusCode, res) => {
 exports.signup = catchAsync(async (req, res, next) => {
   const { name, email, profilePicture } = req.body;
 
-  // let newUser = await User.findOne({email: email});
+  let user = await User.findOne({ email: email }).select("-__v");
 
-  // if (!newUser){
-  //   newUser = new User({
-  //     name: name,
-  //     email: email,
-  //     profilePicture: profilePicture,
-  //   })
-  // }
-
-  const newUser = await User.create({
-    name: name,
-    email: email,
-    profilePicture: profilePicture,
-  });
-
-  createAndSendToken(newUser, 201, res);
+  if (user) {
+    createAndSendToken(user, 200, res);
+  } else {
+    user = await User.create({
+      name: name,
+      email: email,
+      profilePicture: profilePicture,
+    });
+    createAndSendToken(user, 201, res);
+  }
 });
 
 exports.protect = catchAsync(async (req, res, next) => {
