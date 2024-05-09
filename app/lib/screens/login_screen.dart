@@ -12,11 +12,11 @@ class LoginScreen extends ConsumerWidget {
           // onPressed: () => context.goNamed(AppRoutes.home),
           onPressed: () => signInWithGoogle(ref, context),
           icon: SvgPicture.asset(
-            "assets/svg/google.svg",
+            AppAssets.google,
             height: 20,
             width: 20,
           ),
-          label: const Text("Sign In with Google!"),
+          label: Text(AppStrings.signInWithGoogle),
           style: ElevatedButton.styleFrom(
               backgroundColor: kWhite, minimumSize: const Size(150, 50)),
         ),

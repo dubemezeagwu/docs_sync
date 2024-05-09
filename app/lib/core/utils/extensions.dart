@@ -58,3 +58,17 @@ extension DateFormatExtension on String {
     return '$year $month $day';
   }
 }
+
+extension WidgetExtensions on int {
+  SizedBox get kH {
+    return SizedBox(
+      height: toDouble(),
+    );
+  }
+
+  SizedBox get kW {
+    return SizedBox(
+      width: toDouble(),
+    );
+  }
+}

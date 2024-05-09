@@ -109,7 +109,7 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
         title: Row(
           children: [
             SvgPicture.asset(
-              "assets/svg/note.svg",
+              AppAssets.note,
               height: 25,
               width: 10,
             ),
@@ -144,7 +144,7 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
                               const SnackBar(content: Text("Link copied!"))));
                 },
                 icon: const Icon(Icons.lock),
-                label: const Text("Share")),
+                label: const Text(AppStrings.share)),
           )
         ],
         bottom: PreferredSize(

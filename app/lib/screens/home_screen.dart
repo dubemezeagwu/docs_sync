@@ -8,17 +8,28 @@ class HomeScreen extends ConsumerStatefulWidget {
   ConsumerState<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends ConsumerState<HomeScreen> with RouteAware {
+class _HomeScreenState extends ConsumerState<HomeScreen> {
+  
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final userData = ref.watch(userProvider);
     final documents = ref.watch(documentsFutureProvider);
-    return Scaffold(
+  return Scaffold(
       appBar: MainAppBar(
         leading: Padding(
           padding: const EdgeInsets.all(12.0),
           child: SvgPicture.asset(
-            "assets/svg/note.svg",
+            AppAssets.note,
             height: 10,
             width: 10,
           ),
@@ -27,14 +38,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with RouteAware {
         automaticallyImplyLeading: false,
         actions: [
           CircleAvatar(
-            radius: 15,
-            backgroundColor: const Color.fromARGB(255, 231, 176, 194),
-            child: Image.network(userData!.profilePicture),
+            radius: 20,
+            backgroundColor: kPrimary,
+            child: ClipOval(
+              child: Image.network(userData!.profilePicture, fit: BoxFit.cover,),
+              ),
           ),
+          10.kW,
           IconButton(
-              onPressed: () => createDocument(context, ref),
-              icon: const Icon(Icons.add)),
-          IconButton(onPressed: () {}, icon: const Icon(Icons.logout))
+              onPressed: () => signOut(ref), icon: const Icon(Icons.logout))
         ],
       ),
       body: Center(
@@ -55,11 +67,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with RouteAware {
                 },
               );
             } else {
-              return const Text("No documents available");
+              return Text(AppStrings.noDocs);
             }
           }),
           error: ((error, stackTrace) {
-            return const Center(child: Text("Error Occurred!"));
+            return Center(child: Text(AppStrings.error));
           }),
           loading: (() {
             return const Expanded(
@@ -68,6 +80,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with RouteAware {
           }),
         ),
       ),
+      floatingActionButton: FloatingActionButton.small(
+        onPressed: () => createDocument(context, ref),
+        backgroundColor: kPrimary,
+        elevation: 3,
+        child: const Icon(Icons.add),),
     );
   }
 

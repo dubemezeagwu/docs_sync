@@ -1,4 +1,4 @@
 class AppAssets {
-  static String google = "app/assets/svg/google.svg";
-  static String note = "app/assets/svg/note.svg";
+  static const String google = "assets/svg/google.svg";
+  static const String note = "assets/svg/note.svg";
 }
