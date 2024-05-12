@@ -55,6 +55,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 itemBuilder: (context, index) {
                   final document = documents[index];
                   return InkWell(
+                    onLongPress: () => deleteDocument(document.id, ref, context),
                     onTap: () => navigateToDocument(context, document.id),
                     child: DocumentListWidget(
                         title: document.title, subtitle: "Hello World"),
@@ -96,11 +97,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final doc = await ref.read(documentsNotifier.notifier).createDocument();
     if (!context.mounted) return;
     FloatingSnackBar(
-      message: "Document Created",
-      backgroundColor: kPrimary,
-      duration: const Duration(seconds: 1),
-      textColor: kBlack,
-      context: context);
+        message: AppStrings.documentCreated,
+        backgroundColor: kPrimary,
+        duration: const Duration(seconds: 1),
+        textColor: kBlack,
+        context: context);
     // scaffoldMessenger.showSnackBar(
     //   const SnackBar(
     //     content: Text("Document Created"),
@@ -117,5 +118,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     String documentId,
   ) {
     context.push("/document/$documentId");
+  }
+
+  void deleteDocument(String docId, WidgetRef ref, BuildContext context) async {
+    await ref.read(documentsNotifier.notifier).deleteDocument(docId);
+    FloatingSnackBar(
+        message: AppStrings.documentDeleted,
+        backgroundColor: kPrimary,
+        duration: const Duration(seconds: 1),
+        textColor: kBlack,
+        context: context);
   }
 }

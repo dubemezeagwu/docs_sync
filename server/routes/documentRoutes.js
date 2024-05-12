@@ -27,4 +27,10 @@ router.get(
   authController.protect,
   documentController.getDocumentById,
 );
+
+router.delete(
+  "/docs/delete/:id",
+  authController.protect,
+  documentController.deleteDocument,
+);
 module.exports = router;

@@ -21,7 +21,7 @@ exports.createDocument = catchAsync(async (req, res, next) => {
 exports.getUserDocuments = catchAsync(async (req, res, next) => {
   const documents = await Document.find({ uid: req.user.id }).select("-__v");
   if (documents.length == 0) {
-    return next(new AppError("No documents found matching that ID", 404));
+    return next(new AppError("No document found matching that ID", 404));
   }
   res.status(200).json({
     status: "success",
@@ -64,6 +64,24 @@ exports.getDocumentById = catchAsync(async (req, res, next) => {
     status: "success",
     data: {
       document: document,
+    },
+  });
+});
+
+exports.deleteDocument = catchAsync(async (req, res, next) => {
+  let { id } = req.params;
+  if (id.startsWith(":")) {
+    id = id.slice(1);
+  }
+  const document = await Document.findByIdAndDelete(id);
+
+  if (!document) {
+    return next(new AppError("No tour found with that ID", 404));
+  }
+  res.status(204).json({
+    status: "success",
+    data: {
+      document: null,
     },
   });
 });

@@ -8,7 +8,6 @@ import 'package:docs_sync/repository/app_repository.dart';
 final documentRepositoryProvider =
     Provider((ref) => DocumentRepository(client: Client()));
 
-
 class DocumentRepository {
   final Client _client;
 
@@ -133,6 +132,41 @@ class DocumentRepository {
           final documentJson = body["data"]["document"];
           final document = Document.fromJson(documentJson);
           data = NetworkResponse(data: document, status: true);
+      }
+    } catch (e) {
+      data = NetworkResponse(
+          status: false, data: null, errorMessage: e.toString());
+      throw (e.toString());
+    }
+    return data;
+  }
+
+  Future<NetworkResponse<bool>> deleteDocument(String token, String id) async {
+    NetworkResponse<bool> data = NetworkResponse(
+        status: false, data: null, errorMessage: "Unexpected Error occurred");
+
+    try {
+      var response = await _client.delete(
+        Uri.parse("$host/api/v1/docs/delete/$id"),
+        headers: {
+          "Content-Type": "application/json; charset=UTF-8",
+          "Authorization": "Bearer $token"
+        },
+      );
+
+      switch (response.statusCode) {
+        case 204:
+          data = NetworkResponse(data: true, status: true);
+          break;
+        case 404:
+          data = NetworkResponse(
+              status: false, data: false, errorMessage: "No document found");
+          break;
+        default:
+          data = NetworkResponse(
+              status: false,
+              data: null,
+              errorMessage: "An error occurred while deleting the document");
       }
     } catch (e) {
       data = NetworkResponse(

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:docs_sync/domain/app_domain.dart';
 import 'package:docs_sync/repository/app_repository.dart';
+import 'package:docs_sync/repository/document_repository.dart';
 
 final documentsNotifier =
     AutoDisposeAsyncNotifierProvider<DocumentViewModel, List<Document>?>(
@@ -33,6 +34,14 @@ class DocumentViewModel extends AutoDisposeAsyncNotifier<List<Document>?> {
         .read(documentRepositoryProvider)
         .getDocumentById(token ?? "", id);
     return doc.data!;
+  }
+
+  Future<void> deleteDocument(String id) async {
+    String? token = await ref.read(localStorageProvider).getToken();
+    await ref
+        .read(documentRepositoryProvider)
+        .deleteDocument(token ?? "", id);
+    refresh();
   }
 
   Future<void> updateDocumentTitle(
