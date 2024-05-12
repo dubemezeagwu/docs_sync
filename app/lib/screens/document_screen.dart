@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:docs_sync/domain/app_domain.dart';
 import 'package:docs_sync/repository/app_repository.dart';
 import 'package:docs_sync/screens/app_screens.dart';
+import 'package:docs_sync/view_models/document_view_model.dart';
 import 'package:flutter_quill/flutter_quill.dart' as quill;
 
 
@@ -57,23 +58,22 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
       {required String docId, required String title}) async {
     String? token = await ref.read(localStorageProvider).getToken();
     ref
-        .read(documentRepositoryProvider)
-        .updateDocumentTitle(token: token ?? "", id: docId, title: title);
+        .read(documentsNotifier.notifier)
+        .updateDocumentTitle(id: docId, title: title);
   }
 
   void fetchDocumentData(WidgetRef ref) async {
-    String? token = await ref.read(localStorageProvider).getToken();
     final data = await ref
-        .read(documentRepositoryProvider)
-        .getDocumentById(token ?? "", widget.id);
+        .read(documentsNotifier.notifier)
+        .getDocumentById(widget.id);
 
-    if (data.data != null) {
-      _titleController.text = (data.data as Document).title;
+    if (data != null) {
+      _titleController.text = (data as Document).title;
       _quillController = quill.QuillController(
-          document: data.data!.content.isEmpty
+          document: data!.content.isEmpty
               ? quill.Document()
               : quill.Document.fromDelta(
-                  quill.Delta.fromJson(data.data!.content)),
+                  quill.Delta.fromJson(data!.content)),
           selection: const TextSelection.collapsed(offset: 0));
       setState(() {});
     }

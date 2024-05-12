@@ -1,5 +1,7 @@
 import 'package:docs_sync/repository/app_repository.dart';
 import 'package:docs_sync/screens/app_screens.dart';
+import 'package:docs_sync/view_models/document_view_model.dart';
+import 'package:floating_snackbar/floating_snackbar.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -9,22 +11,12 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
-  
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     final userData = ref.watch(userProvider);
-    final documents = ref.watch(documentsFutureProvider);
-  return Scaffold(
+    // final documents = ref.watch(documentsFutureProvider);
+    final documents = ref.watch(documentsNotifier);
+    return Scaffold(
       appBar: MainAppBar(
         leading: Padding(
           padding: const EdgeInsets.all(12.0),
@@ -41,41 +33,46 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             radius: 20,
             backgroundColor: kPrimary,
             child: ClipOval(
-              child: Image.network(userData!.profilePicture, fit: BoxFit.cover,),
+              child: Image.network(
+                userData!.profilePicture,
+                fit: BoxFit.cover,
               ),
+            ),
           ),
           10.kW,
           IconButton(
-              onPressed: () => signOut(ref), icon: const Icon(Icons.logout))
+            onPressed: () => signOut(ref),
+            icon: const Icon(Icons.logout),
+          )
         ],
       ),
       body: Center(
         child: documents.when(
           data: ((documents) {
-            if (documents.data != null && documents.data!.isNotEmpty) {
+            if (documents != null && documents.isNotEmpty) {
               return ListView.builder(
-                itemCount: documents.data!.length,
+                itemCount: documents.length,
                 itemBuilder: (context, index) {
-                  final document = documents.data?[index];
+                  final document = documents[index];
                   return InkWell(
-                    onTap: () =>
-                        navigateToDocument(context, document?.id ?? "0"),
+                    onTap: () => navigateToDocument(context, document.id),
                     child: DocumentListWidget(
-                        title: document?.title ?? "Document One",
-                        subtitle: "Hello World"),
+                        title: document.title, subtitle: "Hello World"),
                   );
                 },
               );
             } else {
-              return Text(AppStrings.noDocs);
+              return const Text(AppStrings.noDocs);
             }
           }),
           error: ((error, stackTrace) {
-            return Center(child: Text(AppStrings.error));
+            return const Center(
+              child: Text(AppStrings.error),
+            );
           }),
           loading: (() {
-            return const Expanded(
-              child: Center(child: CircularProgressIndicator()),
+            return const Center(
+              child: CircularProgressIndicator(),
             );
           }),
         ),
@@ -84,7 +81,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         onPressed: () => createDocument(context, ref),
         backgroundColor: kPrimary,
         elevation: 3,
-        child: const Icon(Icons.add),),
+        child: const Icon(Icons.add),
+      ),
     );
   }
 
@@ -94,18 +92,24 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   void createDocument(BuildContext context, WidgetRef ref) async {
-    String? token = await ref.read(localStorageProvider).getToken();
-
     final scaffoldMessenger = ScaffoldMessenger.of(context);
-    final doc =
-        await ref.read(documentRepositoryProvider).createDocument(token ?? "");
-    if (doc.data != null) {
-      if (!context.mounted) return;
-      context.push("/document/${doc.data?.id}");
-    } else {
-      scaffoldMessenger.showSnackBar(
-          SnackBar(content: Text(doc.errorMessage ?? "Unexpected Error")));
-    }
+    final doc = await ref.read(documentsNotifier.notifier).createDocument();
+    if (!context.mounted) return;
+    FloatingSnackBar(
+      message: "Document Created",
+      backgroundColor: kPrimary,
+      duration: const Duration(seconds: 1),
+      textColor: kBlack,
+      context: context);
+    // scaffoldMessenger.showSnackBar(
+    //   const SnackBar(
+    //     content: Text("Document Created"),
+    //     backgroundColor: kPrimary,
+    //     margin: EdgeInsets.all(25),
+    //     duration: Duration(seconds: 1),
+    //   ),
+    // );
+    context.push("/document/${doc.id}");
   }
 
   void navigateToDocument(

@@ -8,10 +8,6 @@ import 'package:docs_sync/repository/app_repository.dart';
 final documentRepositoryProvider =
     Provider((ref) => DocumentRepository(client: Client()));
 
-final documentsFutureProvider = FutureProvider((ref) async {
-  String? token = await ref.read(localStorageProvider).getToken();
-  return ref.watch(documentRepositoryProvider).getUserDocuments(token ?? "");
-});
 
 class DocumentRepository {
   final Client _client;

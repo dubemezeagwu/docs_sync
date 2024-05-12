@@ -16,7 +16,7 @@ class LoginScreen extends ConsumerWidget {
             height: 20,
             width: 20,
           ),
-          label: Text(AppStrings.signInWithGoogle),
+          label: const Text(AppStrings.signInWithGoogle),
           style: ElevatedButton.styleFrom(
               backgroundColor: kWhite, minimumSize: const Size(150, 50)),
         ),
