@@ -36,7 +36,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("typing", (data) => {
-    socket.broadcast(data.room).emit("changes", data);
+    socket.broadcast.emit("changes", data);
   });
 
   socket.on("save", (data) => {

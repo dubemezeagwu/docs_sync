@@ -19,3 +19,4 @@ export 'package:docs_sync/core/app_core.dart';
 export "package:flutter_svg/flutter_svg.dart";
 export "package:flutter_riverpod/flutter_riverpod.dart";
 export 'package:go_router/go_router.dart';
+export 'package:floating_snackbar/floating_snackbar.dart';

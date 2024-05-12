@@ -6,7 +6,6 @@ import 'package:docs_sync/screens/app_screens.dart';
 import 'package:docs_sync/view_models/document_view_model.dart';
 import 'package:flutter_quill/flutter_quill.dart' as quill;
 
-
 class DocumentScreen extends ConsumerStatefulWidget {
   final String id;
 
@@ -51,29 +50,27 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
   @override
   void dispose() {
     _titleController.dispose();
+    _quillController?.dispose();
     super.dispose();
   }
 
   void updateTitle(WidgetRef ref,
       {required String docId, required String title}) async {
-    String? token = await ref.read(localStorageProvider).getToken();
     ref
         .read(documentsNotifier.notifier)
         .updateDocumentTitle(id: docId, title: title);
   }
 
   void fetchDocumentData(WidgetRef ref) async {
-    final data = await ref
-        .read(documentsNotifier.notifier)
-        .getDocumentById(widget.id);
+    final data =
+        await ref.read(documentsNotifier.notifier).getDocumentById(widget.id);
 
     if (data != null) {
-      _titleController.text = (data as Document).title;
+      _titleController.text = (data).title;
       _quillController = quill.QuillController(
-          document: data!.content.isEmpty
+          document: data.content.isEmpty
               ? quill.Document()
-              : quill.Document.fromDelta(
-                  quill.Delta.fromJson(data!.content)),
+              : quill.Document.fromDelta(quill.Delta.fromJson(data.content)),
           selection: const TextSelection.collapsed(offset: 0));
       setState(() {});
     }
@@ -139,9 +136,12 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
                   Clipboard.setData(ClipboardData(
                           text:
                               "http://localhost:3000/#/document/${widget.id}"))
-                      .then((value) => ScaffoldMessenger.of(context)
-                          .showSnackBar(
-                              const SnackBar(content: Text("Link copied!"))));
+                      .then((value) => FloatingSnackBar(
+                          message: AppStrings.linkCopied,
+                          backgroundColor: kPrimary,
+                          duration: const Duration(seconds: 1),
+                          textColor: kBlack,
+                          context: context));
                 },
                 icon: const Icon(Icons.lock),
                 label: const Text(AppStrings.share)),
