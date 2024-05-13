@@ -3,6 +3,8 @@ import 'package:docs_sync/screens/app_screens.dart';
 import 'package:docs_sync/screens/widgets/popup_button.dart';
 import 'package:docs_sync/view_models/document_view_model.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -66,55 +68,57 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
           )
         ],
       ),
-      body: Stack(children: [
-        Center(
-          child: documents.when(
-            data: ((documents) {
-              if (documents != null && documents.isNotEmpty) {
-                return ListView.builder(
-                  itemCount: documents.length,
-                  itemBuilder: (context, index) {
-                    final document = documents[index];
-                    return InkWell(
-                      onLongPress: () =>
-                          deleteDocument(document.id, ref, context),
-                      onTap: () => navigateToDocument(context, document.id),
-                      child: DocumentListWidget(
-                          title: document.title, subtitle: "Hello World"),
-                    );
-                  },
+      body: Stack(
+        children: [
+          Center(
+            child: documents.when(
+              data: ((documents) {
+                if (documents != null && documents.isNotEmpty) {
+                  return ListView.builder(
+                    itemCount: documents.length,
+                    itemBuilder: (context, index) {
+                      final document = documents[index];
+                      return InkWell(
+                        onLongPress: () =>
+                            deleteDocument(document.id, ref, context),
+                        onTap: () => navigateToDocument(context, document.id),
+                        child: DocumentListWidget(
+                            title: document.title, subtitle: "Hello World"),
+                      );
+                    },
+                  );
+                } else {
+                  return const Text(AppStrings.noDocs);
+                }
+              }),
+              error: ((error, stackTrace) {
+                return const Center(
+                  child: Text(AppStrings.error),
                 );
-              } else {
-                return const Text(AppStrings.noDocs);
-              }
-            }),
-            error: ((error, stackTrace) {
-              return const Center(
-                child: Text(AppStrings.error),
-              );
-            }),
-            loading: (() {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            }),
+              }),
+              loading: (() {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }),
+            ),
           ),
-        ),
-        Positioned(
-          right: 30,
-          bottom: 30,
-          child: Stack(
-            children: [
-              Transform.translate(
-                offset: Offset.fromDirection(
-                    195.0.rad, degOneTranslationAnimation.value * 100),
-                child: Transform(
-                  transform:
-                      Matrix4.rotationZ((rotationAnimation.value as double).rad)
-                        ..scale(degOneTranslationAnimation.value),
-                  alignment: Alignment.center,
-                  child: InkWell(
-                    // onTap: () => createDocument(context, ref),
+          Positioned(
+            right: 30,
+            bottom: 30,
+            height: 200,
+            width: 200,
+            child: Stack(
+              alignment: Alignment.bottomRight,
+              children: [
+                Transform.translate(
+                  offset: Offset.fromDirection(
+                      195.0.rad, degOneTranslationAnimation.value * 100),
+                  child: Transform(
+                    transform: Matrix4.rotationZ(
+                        (rotationAnimation.value as double).rad)
+                      ..scale(degOneTranslationAnimation.value),
+                    alignment: Alignment.center,
                     child: PopUpButton(
                       width: 50,
                       height: 50,
@@ -124,22 +128,20 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                         color: kWhite,
                       ),
                       onPressed: () {
-                        print("Button tapped!");
-                        // return createDocument(context, ref);
+                        return createDocument(context, ref);
                       },
                     ),
                   ),
                 ),
-              ),
-              Transform.translate(
-                offset: Offset.fromDirection(
-                    255.0.rad, degOneTranslationAnimation.value * 100),
-                child: Transform(
-                  transform:
-                      Matrix4.rotationZ((rotationAnimation.value as double).rad)
-                        ..scale(degOneTranslationAnimation.value),
-                  alignment: Alignment.center,
-                  child: PopUpButton(
+                Transform.translate(
+                  offset: Offset.fromDirection(
+                      255.0.rad, degOneTranslationAnimation.value * 100),
+                  child: Transform(
+                    transform: Matrix4.rotationZ(
+                        (rotationAnimation.value as double).rad)
+                      ..scale(degOneTranslationAnimation.value),
+                    alignment: Alignment.center,
+                    child: PopUpButton(
                       width: 50,
                       height: 50,
                       color: kDarkGrey,
@@ -147,30 +149,32 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                         CupertinoIcons.globe,
                         color: kWhite,
                       ),
-                      onPressed: () {}),
+                      onPressed: () {},
+                    ),
+                  ),
                 ),
-              ),
-              Transform(
-                transform:
-                    Matrix4.rotationZ((rotationAnimation.value as double).rad),
-                alignment: Alignment.center,
-                child: PopUpButton(
-                    width: 50,
-                    height: 50,
-                    color: kPrimary,
-                    icon: const Icon(Icons.add),
-                    onPressed: () {
-                      if (animationController.isCompleted) {
-                        animationController.reverse();
-                      } else {
-                        animationController.forward();
-                      }
-                    }),
-              )
-            ],
-          ),
-        )
-      ]),
+                Transform(
+                  transform: Matrix4.rotationZ(
+                      (rotationAnimation.value as double).rad),
+                  alignment: Alignment.center,
+                  child: PopUpButton(
+                      width: 50,
+                      height: 50,
+                      color: kPrimary,
+                      icon: const Icon(Icons.add),
+                      onPressed: () {
+                        if (animationController.isCompleted) {
+                          animationController.reverse();
+                        } else {
+                          animationController.forward();
+                        }
+                      }),
+                ),
+              ],
+            ),
+          )
+        ],
+      ),
       // floatingActionButton: FloatingActionButton.small(
       //   onPressed: () => createDocument(context, ref),
       //   backgroundColor: kPrimary,
