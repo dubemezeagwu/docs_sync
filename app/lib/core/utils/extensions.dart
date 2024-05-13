@@ -72,3 +72,10 @@ extension WidgetExtensions on int {
     );
   }
 }
+
+extension RadianFromDegrees on double {
+  double get rad {
+    const double unitRadian = 57.295779513;
+    return this / unitRadian;
+  }
+}

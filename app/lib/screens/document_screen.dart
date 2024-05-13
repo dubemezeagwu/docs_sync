@@ -145,7 +145,7 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
                           textColor: kBlack,
                           context: context));
                 },
-                icon: const Icon(Icons.lock),
+                icon: const Icon(Icons.share),
                 label: const Text(AppStrings.share)),
           )
         ],
