@@ -24,6 +24,7 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
   quill.QuillController? _quillController;
   Document? document;
   SocketRepository socketRepository = SocketRepository();
+  Timer? _timer;
 
   @override
   void initState() {
@@ -39,9 +40,9 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
           quill.ChangeSource.remote);
     });
 
-    Timer.periodic(const Duration(seconds: 2), (timer) {
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       socketRepository.autoSave(<String, dynamic>{
-        "delta": _quillController!.document.toDelta(),
+        "delta": _quillController?.document.toDelta(),
         "room": widget.id
       });
     });
@@ -50,6 +51,7 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
   @override
   void dispose() {
     _titleController.dispose();
+    _timer?.cancel();
     _quillController?.dispose();
     super.dispose();
   }
