@@ -28,12 +28,12 @@ class _MyAppState extends ConsumerState<MyApp> {
   }
 
   void getUserData(WidgetRef ref) async {
-    ref.read(appStatusProvider.notifier).update((state) => true);
+    ref.read(appStatusProvider.notifier).update((state) => AppState.busy);
     final data = await ref.read(authRepositoryProvider).getUserData();
     if (data.data != null) {
       ref.read(userProvider.notifier).update((state) => data.data);
     }
-    ref.read(appStatusProvider.notifier).update((state) => false);
+    ref.read(appStatusProvider.notifier).update((state) => AppState.idle);
 
   }
 

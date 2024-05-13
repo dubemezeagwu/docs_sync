@@ -10,7 +10,7 @@ class AppNavigator {
     final isAuthenticated = ref.watch(userProvider);
     return GoRouter(
       observers: [CustomNavigatorObserver(ref: ref)],
-      initialLocation: (appStatus == true)
+      initialLocation: (appStatus == AppState.busy)
           ? "/loading"
           : (isAuthenticated == null)
               ? "/"
