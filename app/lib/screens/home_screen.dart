@@ -3,7 +3,6 @@ import 'package:docs_sync/screens/app_screens.dart';
 import 'package:docs_sync/screens/widgets/popup_button.dart';
 import 'package:docs_sync/view_models/document_view_model.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
@@ -51,21 +50,38 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
         title: userData?.name.toString() ?? "USER",
         automaticallyImplyLeading: false,
         actions: [
-          CircleAvatar(
-            radius: 20,
-            backgroundColor: kPrimary,
-            child: ClipOval(
-              child: Image.network(
-                userData!.profilePicture,
-                fit: BoxFit.cover,
+          Stack(
+            children: [
+              GestureDetector(
+                onTap: () => signOut(ref),
+                child: CircleAvatar(
+                  radius: 20,
+                  backgroundColor: kPrimary,
+                  child: ClipOval(
+                    child: Image.network(
+                      userData!.profilePicture,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
               ),
-            ),
+              Positioned(
+                right: 0,
+                bottom: 0,
+                child: Container(
+                  width: 10,
+                  height: 10,
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    color:
+                        Colors.green,
+                  ),
+                ),
+              ),
+            ],
           ),
-          10.kW,
-          IconButton(
-            onPressed: () => signOut(ref),
-            icon: const Icon(Icons.logout),
-          )
+          20.kW,
+          
         ],
       ),
       body: Stack(
