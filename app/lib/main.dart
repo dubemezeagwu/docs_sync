@@ -1,9 +1,4 @@
-import "package:docs_sync/core/constants/color_constants.dart";
-import "package:docs_sync/core/routes/router.dart";
-import "package:docs_sync/core/utils/app_life_cycle_manager.dart";
-import "package:docs_sync/domain/user_state.dart";
 import "package:docs_sync/repository/auth_repository.dart";
-
 import "screens/app_screens.dart";
 
 void main() {
