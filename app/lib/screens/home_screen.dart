@@ -3,7 +3,6 @@ import 'package:docs_sync/screens/app_screens.dart';
 import 'package:docs_sync/screens/widgets/popup_button.dart';
 import 'package:docs_sync/view_models/document_view_model.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/widgets.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -35,7 +34,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
   @override
   Widget build(BuildContext context) {
     final userData = ref.watch(userProvider);
-    // final documents = ref.watch(documentsFutureProvider);
     final documents = ref.watch(documentsNotifier);
     return Scaffold(
       appBar: MainAppBar(
@@ -43,8 +41,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
           padding: const EdgeInsets.all(12.0),
           child: SvgPicture.asset(
             AppAssets.note,
-            height: 10,
-            width: 10,
+            height: 15,
+            width: 15,
           ),
         ),
         title: userData?.name.toString() ?? "USER",
@@ -71,17 +69,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                 child: Container(
                   width: 10,
                   height: 10,
-                  decoration: const BoxDecoration(
+                  decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color:
-                        Colors.green,
+                    border: Border.all(color: kBlack, width: 1),
+                    color: Colors.green,
                   ),
                 ),
               ),
             ],
           ),
           20.kW,
-          
         ],
       ),
       body: Stack(
@@ -94,12 +91,23 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                     itemCount: documents.length,
                     itemBuilder: (context, index) {
                       final document = documents[index];
+
                       return InkWell(
                         onLongPress: () =>
                             deleteDocument(document.id, ref, context),
                         onTap: () => navigateToDocument(context, document.id),
                         child: DocumentListWidget(
-                            title: document.title, subtitle: "Hello World"),
+                          title: document.title,
+                          // subtitle: (document.content[0]["insert"]
+                          //             .toString()
+                          //             .length >= 3
+                          //         )
+                          //     ? "${document.content[0]["insert"].toString().substring(0, 10)}..."
+                          //     : "No Content",
+                          subtitle: "Tap to View!",
+                          onSlide: (context) =>
+                              deleteDocument(document.id, ref, context),
+                        ),
                       );
                     },
                   );

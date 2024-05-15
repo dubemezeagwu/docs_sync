@@ -15,7 +15,7 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
       this.actions});
 
   @override
-  Size get preferredSize => const Size.fromHeight(52);
+  Size get preferredSize => const Size.fromHeight(60);
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +28,7 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
       title: ConstrainedBox(
         constraints: const BoxConstraints(maxHeight: 28, maxWidth: 300),
         child: Text(
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.w600
           ),
