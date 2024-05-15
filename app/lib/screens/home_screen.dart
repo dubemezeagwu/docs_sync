@@ -105,7 +105,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                           //     ? "${document.content[0]["insert"].toString().substring(0, 10)}..."
                           //     : "No Content",
                           subtitle: "Tap to View!",
-                          onSlide: (context) =>
+                          onSlide: (_) =>
                               deleteDocument(document.id, ref, context),
                         ),
                       );
@@ -152,6 +152,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                         color: kWhite,
                       ),
                       onPressed: () {
+                        animationController.reverse();
                         return createDocument(context, ref);
                       },
                     ),
