@@ -1,35 +1,26 @@
 import 'package:docs_sync/screens/app_screens.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 
 class DocumentListWidget extends StatelessWidget {
+  // final int widgetKey;
   final String title;
   final String subtitle;
   final bool? isPublic;
-  final void Function(BuildContext)? onSlide;
+  final void Function(DismissDirection)? onSlide;
   const DocumentListWidget(
       {super.key,
       required this.title,
       required this.subtitle,
-      this.isPublic = false, required this.onSlide});
+      // required this.widgetKey,
+      this.isPublic = false,
+      required this.onSlide});
 
   @override
   Widget build(BuildContext context) {
-    return Slidable(
-      key: const ValueKey(0),
-      endActionPane: ActionPane(
-        extentRatio: 0.25,
-        motion: const ScrollMotion(),
-        children: [
-          SlidableAction(
-            onPressed: onSlide,
-            backgroundColor: kPrimary,
-            foregroundColor: kBlack,
-            icon: Icons.star,
-            label: 'Delete',
-          ),
-        ],
-      ),
+    return Dismissible(
+      // key: ValueKey<int>(widgetKey),
+      key: key!,
+      onDismissed: onSlide,
       child: ShadowCard(
         contentPadding: 0,
         child: ListTile(

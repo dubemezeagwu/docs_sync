@@ -91,23 +91,19 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                     itemCount: documents.length,
                     itemBuilder: (context, index) {
                       final document = documents[index];
-
-                      return InkWell(
-                        onLongPress: () =>
+                      return DocumentListWidget(
+                        title: document.title,
+                        // widgetKey: index,
+                        key: ValueKey<int>(index),
+                        // subtitle: (document.content[0]["insert"]
+                        //             .toString()
+                        //             .length >= 3
+                        //         )
+                        //     ? "${document.content[0]["insert"].toString().substring(0, 10)}..."
+                        //     : "No Content",
+                        subtitle: "Tap to View!",
+                        onSlide: (_) =>
                             deleteDocument(document.id, ref, context),
-                        onTap: () => navigateToDocument(context, document.id),
-                        child: DocumentListWidget(
-                          title: document.title,
-                          // subtitle: (document.content[0]["insert"]
-                          //             .toString()
-                          //             .length >= 3
-                          //         )
-                          //     ? "${document.content[0]["insert"].toString().substring(0, 10)}..."
-                          //     : "No Content",
-                          subtitle: "Tap to View!",
-                          onSlide: (_) =>
-                              deleteDocument(document.id, ref, context),
-                        ),
                       );
                     },
                   );
@@ -200,12 +196,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
           )
         ],
       ),
-      // floatingActionButton: FloatingActionButton.small(
-      //   onPressed: () => createDocument(context, ref),
-      //   backgroundColor: kPrimary,
-      //   elevation: 3,
-      //   child: const Icon(Icons.add),
-      // ),
     );
   }
 
@@ -215,7 +205,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
   }
 
   void createDocument(BuildContext context, WidgetRef ref) async {
-    final scaffoldMessenger = ScaffoldMessenger.of(context);
     final doc = await ref.read(documentsNotifier.notifier).createDocument();
     if (!context.mounted) return;
     FloatingSnackBar(
@@ -224,14 +213,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
         duration: const Duration(seconds: 1),
         textColor: kBlack,
         context: context);
-    // scaffoldMessenger.showSnackBar(
-    //   const SnackBar(
-    //     content: Text("Document Created"),
-    //     backgroundColor: kPrimary,
-    //     margin: EdgeInsets.all(25),
-    //     duration: Duration(seconds: 1),
-    //   ),
-    // );
     context.push("/document/${doc.id}");
   }
 
