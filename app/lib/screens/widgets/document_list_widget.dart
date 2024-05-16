@@ -6,26 +6,32 @@ class DocumentListWidget extends StatelessWidget {
   final String title;
   final String subtitle;
   final bool? isPublic;
+  final String? created;
   final void Function(DismissDirection)? onSlide;
   const DocumentListWidget(
       {super.key,
       required this.title,
       required this.subtitle,
-      // required this.widgetKey,
+      this.created,
       this.isPublic = false,
       required this.onSlide});
 
   @override
   Widget build(BuildContext context) {
     return Dismissible(
-      // key: ValueKey<int>(widgetKey),
       key: key!,
       onDismissed: onSlide,
       child: ShadowCard(
         contentPadding: 0,
         child: ListTile(
           title: Text(title),
-          subtitle: Text(subtitle),
+          subtitle: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(subtitle),
+              Text(created ?? "A few seconds ago"),
+            ],
+          ),
           trailing: isPublic == false
               ? const Icon(Icons.lock)
               : const Icon(CupertinoIcons.globe),

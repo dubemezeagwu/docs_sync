@@ -1,7 +1,7 @@
 import 'package:docs_sync/screens/app_screens.dart';
 
 class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
-  final Widget leading;
+  final Widget? leading;
   final String title;
   final bool automaticallyImplyLeading;
   final List<Widget>? actions;
@@ -10,7 +10,7 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
   MainAppBar(
       {super.key,
       required this.title,
-      required this.leading,
+      this.leading,
       required this.automaticallyImplyLeading,
       this.actions});
 
@@ -24,7 +24,7 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
       bottom: bottom,
       elevation: 0,
       automaticallyImplyLeading: automaticallyImplyLeading,
-      centerTitle: true,
+      centerTitle: false,
       title: ConstrainedBox(
         constraints: const BoxConstraints(maxHeight: 28, maxWidth: 300),
         child: Text(

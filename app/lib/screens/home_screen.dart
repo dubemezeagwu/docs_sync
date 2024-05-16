@@ -35,17 +35,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
   Widget build(BuildContext context) {
     final userData = ref.watch(userProvider);
     final documents = ref.watch(documentsNotifier);
+    final timeOfDay = DateTime.now().timeOfDay;
     return Scaffold(
       appBar: MainAppBar(
-        leading: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: SvgPicture.asset(
-            AppAssets.note,
-            height: 15,
-            width: 15,
-          ),
-        ),
-        title: userData?.name.toString() ?? "USER",
+        title: "Good $timeOfDay!",
         automaticallyImplyLeading: false,
         actions: [
           Stack(
@@ -93,7 +86,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                       final document = documents[index];
                       return DocumentListWidget(
                         title: document.title,
-                        // widgetKey: index,
                         key: ValueKey<int>(index),
                         // subtitle: (document.content[0]["insert"]
                         //             .toString()
@@ -102,6 +94,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                         //     ? "${document.content[0]["insert"].toString().substring(0, 10)}..."
                         //     : "No Content",
                         subtitle: "Tap to View!",
+                        created: document.createdAt.timeAgo,
                         onSlide: (_) =>
                             deleteDocument(document.id, ref, context),
                       );

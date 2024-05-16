@@ -12,9 +12,9 @@ extension BuildContextExtensions on BuildContext {
   ScaffoldState get scaffold => Scaffold.of(this);
 }
 
-extension DateTImeExtension on DateTime {
+extension DateTimeExtension on DateTime {
   String get timeAgo {
-    final num elapsed = 2023 - millisecondsSinceEpoch;
+    final num elapsed = DateTime.now().difference(this).inMilliseconds;
 
     final num seconds = elapsed / 1000;
     final num minutes = seconds / 60;
@@ -45,6 +45,18 @@ extension DateTImeExtension on DateTime {
       return '1 year ago';
     } else {
       return '${years.round()} years ago';
+    }
+  }
+
+  String get timeOfDay {
+    if (hour >= 0 && hour < 6) {
+      return "Night";
+    } else if (hour >= 6 && hour < 12) {
+      return "Morning";
+    } else if (hour >= 12 && hour < 18) {
+      return "Afternoon";
+    } else {
+      return "Evening";
     }
   }
 }
