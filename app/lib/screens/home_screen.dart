@@ -16,6 +16,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
   late AnimationController animationController;
   late Animation degOneTranslationAnimation;
   late Animation rotationAnimation;
+  final GlobalKey<ScaffoldState> _key = GlobalKey();
 
   @override
   void initState() {
@@ -37,6 +38,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
     final documents = ref.watch(documentsNotifier);
     final timeOfDay = DateTime.now().timeOfDay;
     return Scaffold(
+      key: _key,
       appBar: MainAppBar(
         title: "Good $timeOfDay!",
         automaticallyImplyLeading: false,
@@ -44,7 +46,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
           Stack(
             children: [
               GestureDetector(
-                onTap: () => signOut(ref),
+                // onTap: () => signOut(ref),
+                onTap: () {
+                  _key.currentState?.openEndDrawer();
+                },
                 child: CircleAvatar(
                   radius: 20,
                   backgroundColor: kPrimary,
@@ -188,6 +193,91 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
             ),
           )
         ],
+      ),
+      endDrawer: Drawer(
+        child: Column(
+          children: [
+            UserAccountsDrawerHeader(
+              accountName: Text(
+                userData.name,
+                style: const TextStyle(
+                    fontWeight: FontWeight.bold, color: kGreyBlack),
+              ),
+              accountEmail: Text(
+                userData.email,
+                style: const TextStyle(
+                    fontWeight: FontWeight.bold, color: kGreyBlack),
+              ),
+              currentAccountPicture: CircleAvatar(
+                radius: 40,
+                child: ClipOval(
+                  child: Image.network(
+                    userData!.profilePicture,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+              decoration: const BoxDecoration(color: kPrimary),
+            ),
+            ListTile(
+              leading: const Icon(
+                Icons.person,
+              ),
+              title: const Text("Update Profile"),
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              leading: const Icon(
+                Icons.edit_document,
+              ),
+              title: const Text('My Documents'),
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
+            AboutListTile(
+              icon: const Icon(
+                Icons.info,
+              ),
+              applicationIcon: SvgPicture.asset(
+                AppAssets.note,
+                width: 50,
+                height: 50,
+              ),
+              applicationName: 'Docs Sync',
+              applicationVersion: 'v1.0.0',
+              applicationLegalese: '© 2024 Company',
+              aboutBoxChildren: [Text("Built by Dubem Ezeagwu with 🖤")],
+              child: const Text('About app'),
+            ),
+            const Spacer(),
+            ListTile(
+              leading: const Icon(
+                Icons.logout,
+              ),
+              title: const Text('Sign Out'),
+              iconColor: kAlert,
+              textColor: kAlert,
+              onTap: () {
+                signOut(ref);
+              },
+            ),
+            ListTile(
+              leading: const Icon(
+                Icons.delete,
+              ),
+              iconColor: kAlert,
+              textColor: kAlert,
+              title: const Text('Delete Account'),
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
+            16.kH
+          ],
+        ),
       ),
     );
   }
