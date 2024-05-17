@@ -44,18 +44,20 @@ class AuthRepository {
           headers: {"Content-Type": "application/json; charset=UTF-8"});
 
       switch (response.statusCode) {
-        case 200:
+        case SERVER_OK:
           final user = newUser.copyWith(
             uid: jsonDecode(response.body)["data"]["user"]["_id"],
           );
           data = NetworkResponse(data: user, status: true);
           _localStorageRepository.saveToken(jsonDecode(response.body)["token"]);
-        case 201:
+          break;
+        case SERVER_CREATED:
           final user = newUser.copyWith(
             uid: jsonDecode(response.body)["data"]["user"]["_id"],
           );
           data = NetworkResponse(data: user, status: true);
-          _localStorageRepository.saveToken(jsonDecode(response.body)["token"]);  
+          _localStorageRepository.saveToken(jsonDecode(response.body)["token"]);
+          break;
       }
     } catch (e) {
       data = NetworkResponse(
@@ -79,13 +81,14 @@ class AuthRepository {
         });
 
         switch (response.statusCode) {
-          case 200:
+          case SERVER_OK:
             final body = jsonDecode(response.body);
             final userJson = jsonEncode(body["data"]["user"]);
             final user = User.fromJson(userJson);
             data = NetworkResponse(data: user, status: true);
             await _localStorageRepository
                 .saveToken(jsonDecode(response.body)["token"]);
+            break;
         }
       }
     } catch (e) {
