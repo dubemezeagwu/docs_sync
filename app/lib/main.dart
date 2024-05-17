@@ -1,12 +1,9 @@
 import "package:docs_sync/repository/auth_repository.dart";
-import "package:docs_sync/services/network_connection_checker.dart";
-import "package:internet_connection_checker_plus/internet_connection_checker_plus.dart";
 import 'package:overlay_support/overlay_support.dart';
 import "screens/app_screens.dart";
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  NetworkConnectionChecker().initialize();
   runApp(
     const ProviderScope(
       child: MyApp(),
