@@ -1,9 +1,17 @@
 import "package:docs_sync/repository/auth_repository.dart";
+import "package:docs_sync/services/network_connection_checker.dart";
+import "package:internet_connection_checker_plus/internet_connection_checker_plus.dart";
+import 'package:overlay_support/overlay_support.dart';
 import "screens/app_screens.dart";
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(const ProviderScope(child: MyApp()));
+  NetworkConnectionChecker().initialize();
+  runApp(
+    const ProviderScope(
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends ConsumerStatefulWidget {
@@ -17,7 +25,7 @@ class _MyAppState extends ConsumerState<MyApp> {
   @override
   void initState() {
     super.initState();
-     WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       getUserData(ref);
     });
   }
@@ -29,7 +37,6 @@ class _MyAppState extends ConsumerState<MyApp> {
       ref.read(userProvider.notifier).update((state) => data.data);
     }
     ref.read(appStatusProvider.notifier).update((state) => AppState.idle);
-
   }
 
   // This widget is the root of your application.
@@ -39,14 +46,16 @@ class _MyAppState extends ConsumerState<MyApp> {
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: AppLifeCycleManager(
-        child: MaterialApp.router(
-          title: 'Docs Sync',
-          theme: ThemeData(
-            colorScheme: ColorScheme.fromSeed(seedColor: kPrimary),
-            useMaterial3: true,
+        child: OverlaySupport.global(
+          child: MaterialApp.router(
+            title: 'Docs Sync',
+            theme: ThemeData(
+              colorScheme: ColorScheme.fromSeed(seedColor: kPrimary),
+              useMaterial3: true,
+            ),
+            debugShowCheckedModeBanner: false,
+            routerConfig: goRouter,
           ),
-          debugShowCheckedModeBanner: false,
-          routerConfig: goRouter,
         ),
       ),
     );

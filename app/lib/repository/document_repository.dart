@@ -30,11 +30,12 @@ class DocumentRepository {
       );
 
       switch (response.statusCode) {
-        case 201:
+        case SERVER_CREATED:
           final body = jsonDecode(response.body);
           final documentJson = body["data"]["document"];
           final document = Document.fromJson(documentJson);
           data = NetworkResponse(data: document, status: true);
+          break;
       }
     } catch (e) {
       data = NetworkResponse(
@@ -60,7 +61,7 @@ class DocumentRepository {
       });
 
       switch (response.statusCode) {
-        case 200:
+        case SERVER_OK:
           final body = jsonDecode(response.body);
           final int length = body["results"];
           final documentJson = body["data"]["document"];
@@ -69,6 +70,7 @@ class DocumentRepository {
             documents.add(Document.fromJson(documentJson[i]));
           }
           data = NetworkResponse(data: documents, status: true);
+          break;
       }
     } catch (e) {
       data = NetworkResponse(
@@ -99,11 +101,12 @@ class DocumentRepository {
       );
 
       switch (response.statusCode) {
-        case 200:
+        case SERVER_OK:
           final body = jsonDecode(response.body);
           final documentJson = body["data"]["document"];
           final document = Document.fromJson(documentJson);
           data = NetworkResponse(data: document, status: true);
+          break;
       }
     } catch (e) {
       data = NetworkResponse(
@@ -127,11 +130,12 @@ class DocumentRepository {
       );
 
       switch (response.statusCode) {
-        case 200:
+        case SERVER_OK:
           final body = jsonDecode(response.body);
           final documentJson = body["data"]["document"];
           final document = Document.fromJson(documentJson);
           data = NetworkResponse(data: document, status: true);
+          break;
       }
     } catch (e) {
       data = NetworkResponse(
@@ -155,10 +159,10 @@ class DocumentRepository {
       );
 
       switch (response.statusCode) {
-        case 204:
+        case SERVER_NO_CONTENT:
           data = NetworkResponse(data: true, status: true);
           break;
-        case 404:
+        case SERVER_NOT_FOUND:
           data = NetworkResponse(
               status: false, data: false, errorMessage: "No document found");
           break;

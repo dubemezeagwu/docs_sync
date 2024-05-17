@@ -1,8 +1,10 @@
 import 'package:docs_sync/repository/app_repository.dart';
 import 'package:docs_sync/screens/app_screens.dart';
 import 'package:docs_sync/screens/widgets/popup_button.dart';
+import 'package:docs_sync/services/network_connection_checker.dart';
 import 'package:docs_sync/view_models/document_view_model.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -18,6 +20,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
   late Animation rotationAnimation;
   final GlobalKey<ScaffoldState> _key = GlobalKey();
 
+  // // Network Connectivity
+  // Map _source = {InternetStatus.disconnected: false};
+  // bool isConnected = false;
+
   @override
   void initState() {
     animationController = AnimationController(
@@ -32,11 +38,33 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
     });
   }
 
+  // @override
+  // void didChangeDependencies() {
+  //   super.didChangeDependencies();
+  //   NetworkConnectionChecker().myStream.listen(
+  //     (source) {
+  //       _source = source;
+  //       switch (_source.keys.toList()[0]) {
+  //         case InternetStatus.connected:
+  //           isConnected = true;
+  //           setState(() {});
+  //           break;
+  //         case InternetStatus.disconnected:
+  //         default:
+  //           isConnected = false;
+  //           setState(() {});
+  //       }
+  //     },
+  //   );
+  // }
+
   @override
   Widget build(BuildContext context) {
     final userData = ref.watch(userProvider);
     final documents = ref.watch(documentsNotifier);
     final timeOfDay = DateTime.now().timeOfDay;
+    final isConnected = NetworkConnectionChecker().isConnected;
+    print("Widget: $isConnected");
     return Scaffold(
       key: _key,
       appBar: MainAppBar(
@@ -46,7 +74,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
           Stack(
             children: [
               GestureDetector(
-                // onTap: () => signOut(ref),
                 onTap: () {
                   _key.currentState?.openEndDrawer();
                 },
@@ -70,7 +97,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     border: Border.all(color: kBlack, width: 1),
-                    color: Colors.green,
+                    // color: Colors.green
+                    color: isConnected ? Colors.green : Colors.red,
                   ),
                 ),
               ),
@@ -89,19 +117,22 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                     itemCount: documents.length,
                     itemBuilder: (context, index) {
                       final document = documents[index];
-                      return DocumentListWidget(
-                        title: document.title,
-                        key: ValueKey<int>(index),
-                        // subtitle: (document.content[0]["insert"]
-                        //             .toString()
-                        //             .length >= 3
-                        //         )
-                        //     ? "${document.content[0]["insert"].toString().substring(0, 10)}..."
-                        //     : "No Content",
-                        subtitle: "Tap to View!",
-                        created: document.createdAt.timeAgo,
-                        onSlide: (_) =>
-                            deleteDocument(document.id, ref, context),
+                      return InkWell(
+                        onTap: () => navigateToDocument(context, document.id),
+                        child: DocumentListWidget(
+                          title: document.title,
+                          key: ValueKey<int>(index),
+                          // subtitle: (document.content[0]["insert"]
+                          //             .toString()
+                          //             .length >= 3
+                          //         )
+                          //     ? "${document.content[0]["insert"].toString().substring(0, 10)}..."
+                          //     : "No Content",
+                          subtitle: "Tap to View!",
+                          created: document.createdAt.timeAgo,
+                          onSlide: (_) =>
+                              deleteDocument(document.id, ref, context),
+                        ),
                       );
                     },
                   );
