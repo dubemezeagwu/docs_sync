@@ -13,7 +13,8 @@ class DocumentRepository {
 
   DocumentRepository({required Client client}) : _client = client;
 
-  Future<NetworkResponse<Document>> createDocument(String token) async {
+  Future<NetworkResponse<Document>> createDocument(String token,
+      [bool isPublic = false]) async {
     NetworkResponse<Document> data = NetworkResponse(
         status: false, data: null, errorMessage: "Unexpected Error occurred");
 
@@ -22,6 +23,7 @@ class DocumentRepository {
         Uri.parse("$host/api/v1/docs/create"),
         body: jsonEncode({
           "createdAt": DateTime.now().millisecondsSinceEpoch,
+          "isPublic": isPublic
         }),
         headers: {
           "Content-Type": "application/json; charset=UTF-8",

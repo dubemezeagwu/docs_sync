@@ -3,12 +3,13 @@ const catchAsync = require("./../utils/catchAsync");
 const AppError = require("./../utils/appError");
 
 exports.createDocument = catchAsync(async (req, res, next) => {
-  const { createdAt } = req.body;
+  const { createdAt, isPublic } = req.body;
 
   const document = await Document.create({
     uid: req.user.id,
     title: "Untitled Document",
     createdAt: createdAt,
+    public: isPublic || false,
   });
   res.status(201).json({
     status: "success",
@@ -43,6 +44,30 @@ exports.updateDocumentTitle = catchAsync(async (req, res, next) => {
       runValidators: true,
     },
   ).select("-__v");
+  res.status(200).json({
+    status: "success",
+    data: {
+      document: document,
+    },
+  });
+});
+
+exports.addCollaborators = catchAsync(async (req, res, next) => {
+  const { id, collaborators } = req.body;
+
+  const document = await Document.findById(id);
+
+  if (!document) {
+    return next(new AppError("No document found with that ID", 404));
+  }
+
+  document.collaborators = collaborators.map((collaborator) => ({
+    uid: collaborator.uid,
+    role: collaborator.role || "viewer",
+  }));
+
+  await document.save();
+
   res.status(200).json({
     status: "success",
     data: {

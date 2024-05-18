@@ -5,6 +5,10 @@ const documentSchema = new mongoose.Schema({
     required: true,
     type: String,
   },
+  public: {
+    type: Boolean,
+    default: false,
+  },
   createdAt: {
     required: true,
     type: Number,
@@ -18,6 +22,26 @@ const documentSchema = new mongoose.Schema({
     type: Array,
     default: [],
   },
+  collaborators: [
+    {
+      uid: {
+        type: String,
+        required: true,
+      },
+      role: {
+        type: String,
+        enum: ["viewer", "editor"],
+        default: "viewer",
+      },
+    },
+  ],
+});
+
+documentSchema.pre("save", function (next) {
+  if (!this.public && this.collaborators.length > 0) {
+    this.collaborators = [];
+  }
+  next();
 });
 
 const Document = mongoose.model("Document", documentSchema);

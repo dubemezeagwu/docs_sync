@@ -7,13 +7,17 @@ class Document {
   final DateTime createdAt;
   final List content;
   final String id;
+  final bool? isPublic;
+  final List? collaborators;
 
   Document(
       {required this.title,
       required this.uid,
       required this.createdAt,
       required this.content,
-      required this.id});
+      required this.id, 
+      this.isPublic, 
+      this.collaborators,});
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -22,11 +26,15 @@ class Document {
       'createdAt': createdAt.millisecondsSinceEpoch,
       'content': content,
       'id': id,
+      'public': isPublic,
+      'collaborators': collaborators
     };
   }
 
   factory Document.fromMap(Map<String, dynamic> map) {
     return Document(
+        isPublic: map["public"] as bool,
+        collaborators: map["collaborators"] as List<dynamic>,
         title: map['title'] as String,
         id: map['_id'] as String,
         uid: map['uid'] as String,
@@ -47,6 +55,8 @@ class Document {
     DateTime? createdAt,
     List? content,
     String? id,
+    bool? isPublic,
+    List<dynamic>? collaborators,
   }) {
     return Document(
       title: title ?? this.title,
@@ -54,6 +64,8 @@ class Document {
       createdAt: createdAt ?? this.createdAt,
       content: content ?? this.content,
       id: id ?? this.id,
+      isPublic: isPublic ?? this.isPublic,
+      collaborators: collaborators ?? this.collaborators
     );
   }
 }

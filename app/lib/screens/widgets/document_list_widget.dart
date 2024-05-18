@@ -13,7 +13,7 @@ class DocumentListWidget extends StatelessWidget {
       required this.title,
       required this.subtitle,
       this.created,
-      this.isPublic = false,
+      this.isPublic,
       required this.onSlide});
 
   @override

@@ -20,10 +20,11 @@ class DocumentViewModel extends AutoDisposeAsyncNotifier<List<Document>?> {
     return docs.data;
   }
 
-  Future<Document> createDocument() async {
+  Future<Document> createDocument([bool? isPublic]) async {
     String? token = await ref.read(localStorageProvider).getToken();
-    final doc =
-        await ref.read(documentRepositoryProvider).createDocument(token ?? "");
+    final doc = await ref
+        .read(documentRepositoryProvider)
+        .createDocument(token ?? "", isPublic ?? false);
     refresh();
     return doc.data!;
   }
@@ -38,9 +39,7 @@ class DocumentViewModel extends AutoDisposeAsyncNotifier<List<Document>?> {
 
   Future<void> deleteDocument(String id) async {
     String? token = await ref.read(localStorageProvider).getToken();
-    await ref
-        .read(documentRepositoryProvider)
-        .deleteDocument(token ?? "", id);
+    await ref.read(documentRepositoryProvider).deleteDocument(token ?? "", id);
     refresh();
   }
 

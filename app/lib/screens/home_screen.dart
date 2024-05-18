@@ -104,6 +104,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                           //     ? "${document.content[0]["insert"].toString().substring(0, 10)}..."
                           //     : "No Content",
                           subtitle: "Tap to View!",
+                          isPublic: document.isPublic,
                           created: document.createdAt.timeAgo,
                           onSlide: (_) =>
                               deleteDocument(document.id, ref, context),
@@ -153,7 +154,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                       ),
                       onPressed: () {
                         animationController.reverse();
-                        return createDocument(context, ref);
+                        return createDocument(context, ref, false);
                       },
                     ),
                   ),
@@ -174,7 +175,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                         CupertinoIcons.globe,
                         color: kWhite,
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        animationController.reverse();
+                        return createDocument(context, ref, true);
+                      },
                     ),
                   ),
                 ),
@@ -293,8 +297,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
     ref.read(userProvider.notifier).update((state) => null);
   }
 
-  void createDocument(BuildContext context, WidgetRef ref) async {
-    final doc = await ref.read(documentsNotifier.notifier).createDocument();
+  void createDocument(BuildContext context, WidgetRef ref, bool isPublic) async {
+    final doc = await ref.read(documentsNotifier.notifier).createDocument(isPublic);
     if (!context.mounted) return;
     FloatingSnackBar(
         message: AppStrings.documentCreated,
