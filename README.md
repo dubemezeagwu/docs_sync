@@ -2,7 +2,7 @@
 
 ## Overview
 
-`docs_sync` is a comprehensive project designed to facilitate document synchronization across various platforms including Android, iOS, Web, and Desktop. It leverages Flutter for the client-side application, ensuring a seamless user experience across devices, and Node.js with Express.js for the server-side logic, managing backend operations and API endpoints.
+`docs_sync` is a comprehensive project designed to facilitate document synchronization across various platforms including Android, iOS, Web, and Desktop. It leverages Flutter for the client-side application, ensuring a seamless user experience across devices, and Node.js with Express.js for the server-side logic, managing backend operations and API endpoints. Mongoose is also used for MongoDB object modelling.
 
 ## Features
 
@@ -16,7 +16,7 @@
 - Go-Router (Routing)
 - Google Sign In (Google Auth)
 - HTTP (Networking)
-- Cached Network Image (Image Caching)
+- Flutter Quill (Text Editing)
 - Socket IO Client (Real-time Communication)
 
 ## Getting Started
