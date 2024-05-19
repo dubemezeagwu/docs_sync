@@ -17,14 +17,25 @@ class PopUpButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: color,
-        shape: BoxShape.circle,
+    return Material(
+      elevation: 2,
+      // borderRadius: BorderRadius.circular(26),
+      shape: const CircleBorder(
+        side: BorderSide(color: kBlack),
       ),
-      width: width,
-      height: height,
-      child: IconButton(icon: icon,onPressed: onPressed, enableFeedback: true,),
+      child: Container(
+        decoration: BoxDecoration(
+          color: color,
+          shape: BoxShape.circle,
+        ),
+        width: width,
+        height: height,
+        child: IconButton(
+          icon: icon,
+          onPressed: onPressed,
+          enableFeedback: true,
+        ),
+      ),
     );
   }
 }

@@ -91,7 +91,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                   return ListView.builder(
                     itemCount: documents.length,
                     itemBuilder: (context, index) {
-                      final document = documents[index];
+                      final document = documents.reversed.toList()[index];
                       return InkWell(
                         onTap: () => navigateToDocument(context, document.id),
                         child: DocumentListWidget(
@@ -189,7 +189,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                   child: PopUpButton(
                       width: 50,
                       height: 50,
-                      color: kPrimary,
+                      color: kPrimary.withOpacity(0.9),
                       icon: const Icon(Icons.add),
                       onPressed: () {
                         if (animationController.isCompleted) {
