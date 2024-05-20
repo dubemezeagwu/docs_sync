@@ -112,7 +112,18 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                     },
                   );
                 } else {
-                  return const Text(AppStrings.noDocs);
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        height: 50,
+                        width: 50,
+                        child: SvgPicture.asset(AppAssets.note),
+                      ),
+                      14.kH,
+                      const Text(AppStrings.noDocs)
+                    ],
+                  );
                 }
               }),
               error: ((error, stackTrace) {
