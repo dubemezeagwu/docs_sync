@@ -66,11 +66,13 @@ class DocumentRepository {
         case SERVER_OK:
           final body = jsonDecode(response.body);
           final int length = body["results"];
-          final documentJson = body["data"]["document"];
-          List<Document> documents = [];
-          for (int i = 0; i < length; i++) {
-            documents.add(Document.fromJson(documentJson[i]));
-          }
+          final documentJson = body["data"]["document"] as List;
+          // List<Document> documents = [];
+          // for (int i = 0; i < length; i++) {
+          //   documents.add(Document.fromJson(documentJson[i]));
+          // }
+          final List<Document> documents =
+              documentJson.map((doc) => Document.fromJson(doc)).toList();
           data = NetworkResponse(data: documents, status: true);
           break;
       }

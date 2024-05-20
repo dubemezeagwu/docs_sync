@@ -19,7 +19,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
   late Animation rotationAnimation;
   final GlobalKey<ScaffoldState> _key = GlobalKey();
 
-
   @override
   void initState() {
     animationController = AnimationController(
@@ -297,8 +296,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
     ref.read(userProvider.notifier).update((state) => null);
   }
 
-  void createDocument(BuildContext context, WidgetRef ref, bool isPublic) async {
-    final doc = await ref.read(documentsNotifier.notifier).createDocument(isPublic);
+  void createDocument(
+      BuildContext context, WidgetRef ref, bool isPublic) async {
+    final doc =
+        await ref.read(documentsNotifier.notifier).createDocument(isPublic);
     if (!context.mounted) return;
     FloatingSnackBar(
         message: AppStrings.documentCreated,
