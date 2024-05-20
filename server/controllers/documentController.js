@@ -4,10 +4,27 @@ const AppError = require("./../utils/appError");
 
 exports.createDocument = catchAsync(async (req, res, next) => {
   const { createdAt, isPublic } = req.body;
+  const userId = req.user.id;
+
+  const publicDocCount = await Document.countDocuments({
+    uid: userId,
+    public: true,
+  });
+  const privateDocCount = await Document.countDocuments({
+    uid: userId,
+    public: false,
+  });
+
+  let titleBase = "Untitled Document";
+  if (isPublic) {
+    titleBase = `Public Document #${publicDocCount + 1}`;
+  } else {
+    titleBase = `Private Document #${privateDocCount + 1}`;
+  }
 
   const document = await Document.create({
     uid: req.user.id,
-    title: "Untitled Document",
+    title: titleBase,
     createdAt: createdAt,
     public: isPublic || false,
   });
