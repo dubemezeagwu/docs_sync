@@ -9,7 +9,6 @@ class LoginScreen extends ConsumerWidget {
     return Scaffold(
       body: Center(
         child: ElevatedButton.icon(
-          // onPressed: () => context.goNamed(AppRoutes.home),
           onPressed: () => signInWithGoogle(ref, context),
           icon: SvgPicture.asset(
             AppAssets.google,
@@ -18,7 +17,13 @@ class LoginScreen extends ConsumerWidget {
           ),
           label: const Text(AppStrings.signInWithGoogle),
           style: ElevatedButton.styleFrom(
-              backgroundColor: kWhite, minimumSize: const Size(150, 50)),
+            backgroundColor: kPrimary,
+            minimumSize: const Size(150, 50),
+            side: const BorderSide(
+              color: kBlack,
+              width: 1.0
+            )
+          ),
         ),
       ),
     );
@@ -28,9 +33,7 @@ class LoginScreen extends ConsumerWidget {
     final scaffoldMessenger = ScaffoldMessenger.of(context);
     final data = await ref.read(authRepositoryProvider).signInWithGoogle();
     if (data.errorMessage == null) {
-      ref
-          .read(userProvider.notifier)
-          .update((state) => data.data);
+      ref.read(userProvider.notifier).update((state) => data.data);
       if (!context.mounted) return;
       context.goNamed(AppRoutes.home);
     } else {
