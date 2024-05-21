@@ -16,7 +16,7 @@ class DocumentRepository {
   Future<NetworkResponse<Document>> createDocument(String token,
       [bool isPublic = false]) async {
     NetworkResponse<Document> data = NetworkResponse(
-        status: false, data: null, errorMessage: "Unexpected Error occurred");
+        status: false, data: null, errorMessage: "");
 
     try {
       var response = await _client.post(
@@ -49,7 +49,7 @@ class DocumentRepository {
 
   Future<NetworkResponse<List<Document>>> getUserDocuments(String token) async {
     NetworkResponse<List<Document>> data = NetworkResponse(
-        status: false, data: null, errorMessage: "Unexpected Error occurred");
+        status: false, data: null, errorMessage: "");
 
     try {
       var response = await _client.get(
@@ -65,7 +65,7 @@ class DocumentRepository {
       switch (response.statusCode) {
         case SERVER_OK:
           final body = jsonDecode(response.body);
-          final int length = body["results"];
+          // final int length = body["results"];
           final documentJson = body["data"]["document"] as List;
           // List<Document> documents = [];
           // for (int i = 0; i < length; i++) {
@@ -89,7 +89,7 @@ class DocumentRepository {
       required String id,
       required String title}) async {
     NetworkResponse<Document> data = NetworkResponse(
-        status: false, data: null, errorMessage: "Unexpected Error occurred");
+        status: false, data: null, errorMessage: "");
 
     try {
       var response = await _client.patch(
@@ -122,7 +122,7 @@ class DocumentRepository {
   Future<NetworkResponse<Document>> getDocumentById(
       String token, String id) async {
     NetworkResponse<Document> data = NetworkResponse(
-        status: false, data: null, errorMessage: "Unexpected Error occurred");
+        status: false, data: null, errorMessage: "");
 
     try {
       var response = await _client.get(
@@ -151,7 +151,7 @@ class DocumentRepository {
 
   Future<NetworkResponse<bool>> deleteDocument(String token, String id) async {
     NetworkResponse<bool> data = NetworkResponse(
-        status: false, data: null, errorMessage: "Unexpected Error occurred");
+        status: false, data: null, errorMessage: "");
 
     try {
       var response = await _client.delete(

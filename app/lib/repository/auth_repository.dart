@@ -29,7 +29,7 @@ class AuthRepository {
 
   Future<NetworkResponse<User>> signInWithGoogle() async {
     NetworkResponse<User> data = NetworkResponse(
-        status: false, data: null, errorMessage: "Unexpected Error occurred");
+        status: false, data: null, errorMessage: "");
     try {
       final GoogleSignInAccount? userAccount = await _googleSignIn.signIn();
       final User newUser = User(
@@ -69,7 +69,7 @@ class AuthRepository {
 
   Future<NetworkResponse<User>> getUserData() async {
     NetworkResponse<User> data = NetworkResponse(
-        status: false, data: null, errorMessage: "Unexpected Error occurred");
+        status: false, data: null, errorMessage: "");
     try {
       String? token = await _localStorageRepository.getToken();
 
