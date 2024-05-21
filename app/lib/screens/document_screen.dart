@@ -51,8 +51,8 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
   @override
   void dispose() {
     _titleController.dispose();
-    _timer?.cancel();
     _quillController?.dispose();
+    _timer?.cancel();
     super.dispose();
   }
 
@@ -66,9 +66,10 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
   void fetchDocumentData(WidgetRef ref) async {
     final data =
         await ref.read(documentsNotifier.notifier).getDocumentById(widget.id);
+         _titleController.text = (data).title;
 
-    if (data != null) {
-      _titleController.text = (data).title;
+
+    if (data.content.isNotEmpty) {
       _quillController = quill.QuillController(
           document: data.content.isEmpty
               ? quill.Document()
