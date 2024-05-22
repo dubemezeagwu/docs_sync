@@ -66,8 +66,7 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
   void fetchDocumentData(WidgetRef ref) async {
     final data =
         await ref.read(documentsNotifier.notifier).getDocumentById(widget.id);
-         _titleController.text = (data).title;
-
+    _titleController.text = (data).title;
 
     if (data.content.isNotEmpty) {
       _quillController = quill.QuillController(
@@ -87,6 +86,14 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
         socketRepository.typing(map);
       }
     });
+  }
+
+  void addCollaborators() {
+    showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return CollaboratorsBottomSheet();
+        });
   }
 
   @override
@@ -136,15 +143,16 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
             padding: const EdgeInsets.all(10.0),
             child: ElevatedButton.icon(
                 onPressed: () {
-                  Clipboard.setData(ClipboardData(
-                          text:
-                              "http://localhost:3000/#/document/${widget.id}"))
-                      .then((value) => FloatingSnackBar(
-                          message: AppStrings.linkCopied,
-                          backgroundColor: kPrimary,
-                          duration: const Duration(seconds: 1),
-                          textColor: kBlack,
-                          context: context));
+                  addCollaborators();
+                  // Clipboard.setData(ClipboardData(
+                  //         text:
+                  //             "http://localhost:3000/#/document/${widget.id}"))
+                  //     .then((value) => FloatingSnackBar(
+                  //         message: AppStrings.linkCopied,
+                  //         backgroundColor: kPrimary,
+                  //         duration: const Duration(seconds: 1),
+                  //         textColor: kBlack,
+                  //         context: context));
                 },
                 icon: const Icon(Icons.share),
                 label: const Text(AppStrings.share)),
