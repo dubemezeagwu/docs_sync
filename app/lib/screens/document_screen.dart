@@ -66,11 +66,11 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
   void fetchDocumentData(WidgetRef ref) async {
     final data =
         await ref.read(documentsNotifier.notifier).getDocumentById(widget.id);
-    _titleController.text = (data).title;
 
-    if (data.content.isNotEmpty) {
+    if (data != null) {
+      _titleController.text = (data).title;
       _quillController = quill.QuillController(
-          document: data.content.isEmpty
+          document: data.content.isEmpty 
               ? quill.Document()
               : quill.Document.fromDelta(quill.Delta.fromJson(data.content)),
           selection: const TextSelection.collapsed(offset: 0));

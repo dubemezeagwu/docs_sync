@@ -20,7 +20,11 @@ var socketServer = http.createServer(app);
 var io = require("socket.io")(socketServer);
 
 mongoose
-  .connect(database, { useNewUrlParser: true, useUnifiedTopology: true })
+  .connect(database, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useFindAndModify: false,
+  })
   .then((con) => {
     console.log(con.connections);
     console.log("DB connection successful");
