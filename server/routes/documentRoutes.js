@@ -33,4 +33,17 @@ router.delete(
   authController.protect,
   documentController.deleteDocument,
 );
+
+router.patch(
+  "/docs/addCollaborators",
+  authController.protect,
+  documentController.addCollaborators,
+);
+
+router.patch(
+  "/docs/removeCollaborators",
+  authController.protect,
+  documentController.removeCollaborators,
+);
+
 module.exports = router;
