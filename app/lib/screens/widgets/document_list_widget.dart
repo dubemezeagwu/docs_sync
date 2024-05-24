@@ -21,6 +21,26 @@ class DocumentListWidget extends StatelessWidget {
     return Dismissible(
       key: key!,
       onDismissed: onSlide,
+      direction: DismissDirection.endToStart,
+      background: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: Container(
+          color: kAlert,
+          child: const Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Padding(
+                padding: EdgeInsets.all(12.0),
+                child: Text(
+                  "Delete",
+                  style: TextStyle(fontSize: 16),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
       child: ShadowCard(
         contentPadding: 0,
         child: ListTile(
