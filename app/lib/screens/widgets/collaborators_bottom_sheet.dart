@@ -18,11 +18,11 @@ class _CollaboratorsBottomSheetState
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(16),
-      width: double.infinity,
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisSize: MainAxisSize.max,
         children: [
           32.kH,
           const Text(
@@ -36,23 +36,25 @@ class _CollaboratorsBottomSheetState
           // do a circle avatar wrapped
           Wrap(
             children: [
-              ...List.generate(8, (index) => Column(
+              ...List.generate(9, (index) => Column(
                 children: [
                   const Padding(
                     padding: EdgeInsets.all(8.0),
-                    child: Stack(
-                      children: [
-                        CircleAvatar(
-                          radius: 30,
-                          backgroundColor: kPrimary,
-                          child: ClipOval(),
-                        ),
-                        Positioned(
-                          right: 0,
-                          top: 0,
-                          child: Icon(Icons.cancel),
-                        ),
-                      ],
+                    child: Flexible(
+                      child: Stack(
+                        children: [
+                          CircleAvatar(
+                            radius: 30,
+                            backgroundColor: kPrimary,
+                            child: ClipOval(),
+                          ),
+                          Positioned(
+                            right: 0,
+                            top: 0,
+                            child: Icon(Icons.cancel),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                   4.kH,
@@ -61,7 +63,6 @@ class _CollaboratorsBottomSheetState
               ),)
             ],
           ),
-          const Spacer(),
           const Text(
             "Add a collaborator",
             style: TextStyle(
@@ -118,19 +119,15 @@ class _CollaboratorsBottomSheetState
               ],
             ),
           ),
-          8.kH,
-          Expanded(
-            flex: 6,
-            child: ElevatedButton(
-              onPressed: () {},
-              style: ElevatedButton.styleFrom(
-                  backgroundColor: kPrimary,
-                  minimumSize: const Size(150, 50),
-                  side: const BorderSide(color: kBlack, width: 1.0)),
-              child: const Text("Add"),
-            ),
+          16.kH,
+          ElevatedButton(
+            onPressed: () {},
+            style: ElevatedButton.styleFrom(
+                backgroundColor: kPrimary,
+                minimumSize: const Size(150, 50),
+                side: const BorderSide(color: kBlack, width: 1.0)),
+            child: const Text("Add"),
           ),
-          const Spacer(),
         ],
       ),
     );

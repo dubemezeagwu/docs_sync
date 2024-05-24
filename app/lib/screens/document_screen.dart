@@ -70,7 +70,7 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
     if (data != null) {
       _titleController.text = (data).title;
       _quillController = quill.QuillController(
-          document: data.content.isEmpty 
+          document: data.content.isEmpty
               ? quill.Document()
               : quill.Document.fromDelta(quill.Delta.fromJson(data.content)),
           selection: const TextSelection.collapsed(offset: 0));
@@ -88,11 +88,16 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
     });
   }
 
-  void addCollaborators() {
+  void addCollaborators(BuildContext context) {
     showModalBottomSheet(
         context: context,
+        isScrollControlled: true,
         builder: (context) {
-          return CollaboratorsBottomSheet();
+          return const Wrap(
+            children: [
+              CollaboratorsBottomSheet(),
+            ],
+          );
         });
   }
 
@@ -143,7 +148,7 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
             padding: const EdgeInsets.all(10.0),
             child: ElevatedButton.icon(
                 onPressed: () {
-                  addCollaborators();
+                  addCollaborators(context);
                   // Clipboard.setData(ClipboardData(
                   //         text:
                   //             "http://localhost:3000/#/document/${widget.id}"))
