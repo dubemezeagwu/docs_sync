@@ -36,33 +36,34 @@ class _CollaboratorsBottomSheetState
           // do a circle avatar wrapped
           Wrap(
             children: [
-              ...List.generate(9, (index) => Column(
+              ...List.generate(5, (index) => Column(
                 children: [
                   const Padding(
                     padding: EdgeInsets.all(8.0),
-                    child: Flexible(
-                      child: Stack(
-                        children: [
-                          CircleAvatar(
-                            radius: 30,
-                            backgroundColor: kPrimary,
-                            child: ClipOval(),
-                          ),
-                          Positioned(
-                            right: 0,
-                            top: 0,
-                            child: Icon(Icons.cancel),
-                          ),
-                        ],
-                      ),
+                    child: Stack(
+                      children: [
+                        CircleAvatar(
+                          radius: 30,
+                          backgroundColor: kPrimary,
+                          child: ClipOval(),
+                        ),
+                        Positioned(
+                          right: 0,
+                          top: 0,
+                          child: Icon(Icons.cancel),
+                        ),
+                      ],
                     ),
                   ),
                   4.kH,
-                  const Text("Dubem")
+                  SizedBox(
+                    width: 75,
+                    child: const Text("Dubem Ezeagwu You", softWrap: true,))
                 ],
               ),)
             ],
           ),
+          8.kH,
           const Text(
             "Add a collaborator",
             style: TextStyle(
@@ -128,6 +129,7 @@ class _CollaboratorsBottomSheetState
                 side: const BorderSide(color: kBlack, width: 1.0)),
             child: const Text("Add"),
           ),
+          16.kH,
         ],
       ),
     );
