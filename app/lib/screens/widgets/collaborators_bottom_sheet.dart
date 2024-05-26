@@ -1,13 +1,10 @@
 import "package:docs_sync/screens/app_screens.dart";
-import "package:flutter/cupertino.dart";
-import "package:flutter/material.dart";
-import "package:flutter/widgets.dart";
 
 class CollaboratorsBottomSheet extends ConsumerStatefulWidget {
   const CollaboratorsBottomSheet({super.key});
 
   @override
-  _CollaboratorsBottomSheetState createState() =>
+  ConsumerState<CollaboratorsBottomSheet> createState() =>
       _CollaboratorsBottomSheetState();
 }
 
