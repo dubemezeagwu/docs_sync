@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:docs_sync/domain/app_domain.dart';
 import 'package:docs_sync/repository/app_repository.dart';
 import 'package:docs_sync/screens/app_screens.dart';
+import 'package:docs_sync/screens/widgets/bottom_sheet_options_widget.dart';
 import 'package:docs_sync/view_models/document_view_model.dart';
 import 'package:flutter_quill/flutter_quill.dart' as quill;
 
@@ -90,13 +91,22 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
 
   void addCollaborators(BuildContext context) {
     showModalBottomSheet(
+      useSafeArea: true,
         context: context,
         isScrollControlled: true,
         builder: (context) {
-          return const Wrap(
-            children: [
-              CollaboratorsBottomSheet(),
-            ],
+          return SizedBox(
+            width: double.infinity,
+            child: Wrap(
+              alignment: WrapAlignment.center,
+              children: [
+                BottomSheetOptionsWidget(icon: Icon(Icons.send), onPressed: (){}, title: "Send Doc"),
+                BottomSheetOptionsWidget(icon: Icon(Icons.download), onPressed: (){}, title: "Download Doc"),
+                BottomSheetOptionsWidget(icon: Icon(Icons.file_copy), onPressed: (){}, title: "Create PDF"),
+                BottomSheetOptionsWidget(icon: Icon(Icons.person_add), onPressed: (){}, title: "Add collaborators"),
+                BottomSheetOptionsWidget(icon: Icon(Icons.hotel_sharp), onPressed: (){}, title: "Today Docs"),
+              ],
+            ),
           );
         });
   }

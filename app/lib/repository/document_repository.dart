@@ -58,9 +58,10 @@ class DocumentRepository {
           "Content-Type": "application/json; charset=UTF-8",
           "Authorization": "Bearer $token"
         },
-      ).timeout(const Duration(seconds: 10), onTimeout: () {
-        throw TimeoutException("The connection has timed out!");
-      });
+      );
+      // ).timeout(const Duration(seconds: 10), onTimeout: () {
+      //   throw TimeoutException("The connection has timed out!");
+      // });
 
       switch (response.statusCode) {
         case SERVER_OK:

@@ -27,6 +27,7 @@ exports.createDocument = catchAsync(async (req, res, next) => {
     title: titleBase,
     createdAt: createdAt,
     public: isPublic || false,
+    content: [],
   });
   res.status(201).json({
     status: "success",
