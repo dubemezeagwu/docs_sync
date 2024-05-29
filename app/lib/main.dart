@@ -1,5 +1,4 @@
 import "package:docs_sync/repository/auth_repository.dart";
-import 'package:overlay_support/overlay_support.dart';
 import "screens/app_screens.dart";
 
 void main() {
@@ -43,7 +42,6 @@ class _MyAppState extends ConsumerState<MyApp> {
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: AppLifeCycleManager(
-        child: OverlaySupport.global(
           child: MaterialApp.router(
             title: 'Docs Sync',
             theme: ThemeData(
@@ -54,7 +52,6 @@ class _MyAppState extends ConsumerState<MyApp> {
             routerConfig: goRouter,
           ),
         ),
-      ),
     );
   }
 }

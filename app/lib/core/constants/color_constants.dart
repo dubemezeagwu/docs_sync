@@ -5,4 +5,5 @@ const Color kBlack = Color(0xFF000000);
 const Color kGreyBlack = Color.fromARGB(255, 50, 50, 50);
 const Color kDarkGrey = Color(0xFF101828);
 const Color kPrimary = Color.fromARGB(255, 159, 206, 236);
+const Color kBackground = Color.fromARGB(255, 241, 232, 215);
 const Color kAlert = Color.fromARGB(255, 224, 80, 80);

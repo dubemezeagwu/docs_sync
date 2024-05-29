@@ -41,6 +41,14 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
           quill.ChangeSource.remote);
     });
 
+    // socketRepository.onChangedListener((data) {
+    //   _quillController?.compose(
+    //       quill.Document.fromJson(data["delta"]).toDelta(),
+    //       _quillController?.selection ??
+    //           const TextSelection.collapsed(offset: 0),
+    //       quill.ChangeSource.remote);
+    // });
+
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       socketRepository.autoSave(<String, dynamic>{
         "delta": _quillController?.document.toDelta(),
@@ -74,8 +82,19 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
           document: data.content.isEmpty
               ? quill.Document()
               : quill.Document.fromDelta(quill.Delta.fromJson(data.content)),
-          selection: const TextSelection.collapsed(offset: 0));
+          selection: const TextSelection.collapsed(offset: 0),
+          keepStyleOnNewLine: true);
       setState(() {});
+
+      // _titleController.text = (data).title;
+      // _quillController = quill.QuillController(
+      //     configurations: const quill.QuillControllerConfigurations(),
+      //     document: data.content.isEmpty
+      //         ? quill.Document()
+      //         : quill.Document.fromJson(data.content),
+      //     keepStyleOnNewLine: true,
+      //     selection: const TextSelection.collapsed(offset: 0));
+      // setState(() {});
     }
 
     _quillController?.document.changes.listen((event) {
@@ -92,23 +111,37 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
   void addCollaborators(BuildContext context) {
     showModalBottomSheet(
       useSafeArea: true,
-        context: context,
-        isScrollControlled: true,
-        builder: (context) {
-          return SizedBox(
-            width: double.infinity,
-            child: Wrap(
-              alignment: WrapAlignment.center,
-              children: [
-                BottomSheetOptionsWidget(icon: Icon(Icons.send), onPressed: (){}, title: "Send Doc"),
-                BottomSheetOptionsWidget(icon: Icon(Icons.download), onPressed: (){}, title: "Download Doc"),
-                BottomSheetOptionsWidget(icon: Icon(Icons.file_copy), onPressed: (){}, title: "Create PDF"),
-                BottomSheetOptionsWidget(icon: Icon(Icons.person_add), onPressed: (){}, title: "Add collaborators"),
-                BottomSheetOptionsWidget(icon: Icon(Icons.hotel_sharp), onPressed: (){}, title: "Today Docs"),
-              ],
-            ),
-          );
-        });
+      context: context,
+      isScrollControlled: true,
+      builder: (context) {
+        return SizedBox(
+          width: double.infinity,
+          child: Wrap(
+            alignment: WrapAlignment.center,
+            children: [
+              BottomSheetOptionsWidget(
+                  icon: Icon(Icons.send), onPressed: () {}, title: "Send Doc"),
+              BottomSheetOptionsWidget(
+                  icon: Icon(Icons.download),
+                  onPressed: () {},
+                  title: "Download Doc"),
+              BottomSheetOptionsWidget(
+                  icon: Icon(Icons.file_copy),
+                  onPressed: () {},
+                  title: "Create PDF"),
+              BottomSheetOptionsWidget(
+                  icon: Icon(Icons.person_add),
+                  onPressed: () {},
+                  title: "Add collaborators"),
+              BottomSheetOptionsWidget(
+                  icon: Icon(Icons.hotel_sharp),
+                  onPressed: () {},
+                  title: "Today Docs"),
+            ],
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -193,15 +226,24 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
           child: Column(
             children: [
               const quill.QuillToolbar(),
+              8.kH,
               Expanded(
-                child: Card(
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: kBackground,
+                    border: Border.all(color: kBlack, width: 2.0),
+                    borderRadius: BorderRadius.circular(12)
+                  ),
                   child: quill.QuillEditor.basic(
                     configurations: const quill.QuillEditorConfigurations(
                       readOnly: false,
+                      padding: EdgeInsets.all(8),
+                      showCursor: true
                     ),
                   ),
                 ),
-              )
+              ),
+              8.kH,
             ],
           ),
         ),
