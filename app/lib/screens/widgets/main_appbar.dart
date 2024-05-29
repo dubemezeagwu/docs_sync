@@ -5,12 +5,13 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final bool automaticallyImplyLeading;
   final List<Widget>? actions;
-  PreferredSizeWidget? bottom;
+  final PreferredSizeWidget? bottom;
 
-  MainAppBar(
+  const MainAppBar(
       {super.key,
       required this.title,
       this.leading,
+      this.bottom,
       required this.automaticallyImplyLeading,
       this.actions});
 

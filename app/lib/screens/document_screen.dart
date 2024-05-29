@@ -114,34 +114,57 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
       context: context,
       isScrollControlled: true,
       builder: (context) {
-        return SizedBox(
-          width: double.infinity,
-          child: Wrap(
-            alignment: WrapAlignment.center,
-            children: [
-              BottomSheetOptionsWidget(
-                  icon: Icon(Icons.send), onPressed: () {}, title: "Send Doc"),
-              BottomSheetOptionsWidget(
-                  icon: Icon(Icons.download),
-                  onPressed: () {},
-                  title: "Download Doc"),
-              BottomSheetOptionsWidget(
-                  icon: Icon(Icons.file_copy),
-                  onPressed: () {},
-                  title: "Create PDF"),
-              BottomSheetOptionsWidget(
-                  icon: Icon(Icons.person_add),
-                  onPressed: () {},
-                  title: "Add collaborators"),
-              BottomSheetOptionsWidget(
-                  icon: Icon(Icons.hotel_sharp),
-                  onPressed: () {},
-                  title: "Today Docs"),
-            ],
-          ),
+        return Stack(
+          alignment: AlignmentDirectional.topCenter,
+          clipBehavior: Clip.none,
+          children: [
+            const WhiteDragger(),
+            SizedBox(
+              width: double.infinity,
+              child: Wrap(
+                alignment: WrapAlignment.center,
+                children: [
+                  BottomSheetOptionsWidget(
+                      icon: Icon(Icons.send),
+                      onPressed: () {},
+                      title: "Send Document"),
+                  // BottomSheetOptionsWidget(
+                  //     icon: Icon(Icons.download),
+                  //     onPressed: () {},
+                  //     title: "Download Document"),
+                  BottomSheetOptionsWidget(
+                      icon: Icon(Icons.file_copy),
+                      onPressed: () {},
+                      title: "Create PDF"),
+                  BottomSheetOptionsWidget(
+                      icon: Icon(Icons.person_add),
+                      onPressed: () {},
+                      title: "Add collaborators"),
+                  BottomSheetOptionsWidget(
+                      icon: Icon(Icons.link),
+                      onPressed: () {
+                        context.pop();
+                        copyLink();
+                      },
+                      title: "Copy Link"),
+                ],
+              ),
+            ),
+          ],
         );
       },
     );
+  }
+
+  void copyLink() {
+    Clipboard.setData(ClipboardData(
+            text: "http://localhost:3000/#/document/${widget.id}"))
+        .then((value) => FloatingSnackBar(
+            message: AppStrings.linkCopied,
+            backgroundColor: kPrimary,
+            duration: const Duration(seconds: 1),
+            textColor: kBlack,
+            context: context));
   }
 
   @override
@@ -192,15 +215,6 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
             child: ElevatedButton.icon(
                 onPressed: () {
                   addCollaborators(context);
-                  // Clipboard.setData(ClipboardData(
-                  //         text:
-                  //             "http://localhost:3000/#/document/${widget.id}"))
-                  //     .then((value) => FloatingSnackBar(
-                  //         message: AppStrings.linkCopied,
-                  //         backgroundColor: kPrimary,
-                  //         duration: const Duration(seconds: 1),
-                  //         textColor: kBlack,
-                  //         context: context));
                 },
                 icon: const Icon(Icons.share),
                 label: const Text(AppStrings.share)),
@@ -230,22 +244,41 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
               Expanded(
                 child: Container(
                   decoration: BoxDecoration(
-                    color: kBackground,
-                    border: Border.all(color: kBlack, width: 2.0),
-                    borderRadius: BorderRadius.circular(12)
-                  ),
+                      color: kBackground,
+                      border: Border.all(color: kBlack, width: 2.0),
+                      borderRadius: BorderRadius.circular(12)),
                   child: quill.QuillEditor.basic(
                     configurations: const quill.QuillEditorConfigurations(
-                      readOnly: false,
-                      padding: EdgeInsets.all(8),
-                      showCursor: true
-                    ),
+                        readOnly: false,
+                        padding: EdgeInsets.all(8),
+                        showCursor: true),
                   ),
                 ),
               ),
               8.kH,
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class WhiteDragger extends StatelessWidget {
+  const WhiteDragger({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+      top: -15,
+      child: Container(
+        width: 60,
+        height: 7,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(6),
+          color: kWhite,
         ),
       ),
     );
