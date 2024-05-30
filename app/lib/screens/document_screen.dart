@@ -6,6 +6,7 @@ import 'package:docs_sync/screens/app_screens.dart';
 import 'package:docs_sync/screens/widgets/bottom_sheet_options_widget.dart';
 import 'package:docs_sync/view_models/document_view_model.dart';
 import 'package:flutter_quill/flutter_quill.dart' as quill;
+import 'package:pdf/widgets.dart' as pw;
 
 class DocumentScreen extends ConsumerStatefulWidget {
   final String id;
@@ -75,6 +76,7 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
   void fetchDocumentData(WidgetRef ref) async {
     final data =
         await ref.read(documentsNotifier.notifier).getDocumentById(widget.id);
+    document = data;
 
     if (data != null) {
       _titleController.text = (data).title;
@@ -134,7 +136,10 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
                   //     title: "Download Document"),
                   BottomSheetOptionsWidget(
                       icon: Icon(Icons.file_copy),
-                      onPressed: () {},
+                      onPressed: () {
+                        context.pop();
+                        convertDocToPDF();
+                      },
                       title: "Create PDF"),
                   BottomSheetOptionsWidget(
                       icon: Icon(Icons.person_add),
@@ -165,6 +170,27 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
             duration: const Duration(seconds: 1),
             textColor: kBlack,
             context: context));
+  }
+
+  void convertDocToPDF() async {
+    final pdf = pw.Document();
+    pdf.addPage(pw.Page(
+      pageFormat: PdfPageFormat.a4,
+      margin: pw.EdgeInsets.zero,
+      // theme: pw.ThemeData.withFont(
+      //   fontFallback: [globalFont!],
+      // ),
+      build: (context) {
+        var delta = _quillController?.document.toDelta();
+        pw.Widget dpdf = DeltaToPDF.toPDFWidget(delta!);
+        return dpdf;
+      },
+    ));
+    final output = await getApplicationDocumentsDirectory();
+    final file = File("${output.path}/${document?.title ?? "document"}.pdf");
+    // final file = File("${output.path}/$document.pdf");
+    await file.writeAsBytes(await pdf.save());
+    OpenAppFile.open("${output.path}/${document?.title ?? "document"}.pdf");
   }
 
   @override

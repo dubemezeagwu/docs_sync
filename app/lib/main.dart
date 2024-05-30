@@ -1,8 +1,10 @@
+import "package:docs_sync/core/utils/globals.dart";
 import "package:docs_sync/repository/auth_repository.dart";
 import "screens/app_screens.dart";
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+  loadGlobalFont();
   runApp(
     const ProviderScope(
       child: MyApp(),
@@ -42,16 +44,16 @@ class _MyAppState extends ConsumerState<MyApp> {
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: AppLifeCycleManager(
-          child: MaterialApp.router(
-            title: 'Docs Sync',
-            theme: ThemeData(
-              colorScheme: ColorScheme.fromSeed(seedColor: kPrimary),
-              useMaterial3: true,
-            ),
-            debugShowCheckedModeBanner: false,
-            routerConfig: goRouter,
+        child: MaterialApp.router(
+          title: 'Docs Sync',
+          theme: ThemeData(
+            colorScheme: ColorScheme.fromSeed(seedColor: kPrimary),
+            useMaterial3: true,
           ),
+          debugShowCheckedModeBanner: false,
+          routerConfig: goRouter,
         ),
+      ),
     );
   }
 }
