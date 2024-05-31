@@ -77,27 +77,24 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
     final data =
         await ref.read(documentsNotifier.notifier).getDocumentById(widget.id);
     document = data;
+    _titleController.text = (data).title;
+    _quillController = quill.QuillController(
+        document: (data.content != null && data.content!.isEmpty)
+            ? quill.Document()
+            : quill.Document.fromDelta(quill.Delta.fromJson(data.content!)),
+        selection: const TextSelection.collapsed(offset: 0),
+        keepStyleOnNewLine: true);
+    setState(() {});
 
-    if (data != null) {
-      _titleController.text = (data).title;
-      _quillController = quill.QuillController(
-          document: data.content.isEmpty
-              ? quill.Document()
-              : quill.Document.fromDelta(quill.Delta.fromJson(data.content)),
-          selection: const TextSelection.collapsed(offset: 0),
-          keepStyleOnNewLine: true);
-      setState(() {});
-
-      // _titleController.text = (data).title;
-      // _quillController = quill.QuillController(
-      //     configurations: const quill.QuillControllerConfigurations(),
-      //     document: data.content.isEmpty
-      //         ? quill.Document()
-      //         : quill.Document.fromJson(data.content),
-      //     keepStyleOnNewLine: true,
-      //     selection: const TextSelection.collapsed(offset: 0));
-      // setState(() {});
-    }
+    // _titleController.text = (data).title;
+    // _quillController = quill.QuillController(
+    //     configurations: const quill.QuillControllerConfigurations(),
+    //     document: data.content.isEmpty
+    //         ? quill.Document()
+    //         : quill.Document.fromJson(data.content),
+    //     keepStyleOnNewLine: true,
+    //     selection: const TextSelection.collapsed(offset: 0));
+    // setState(() {});
 
     _quillController?.document.changes.listen((event) {
       if (event.source == quill.ChangeSource.local) {
@@ -138,7 +135,7 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
                       icon: Icon(Icons.file_copy),
                       onPressed: () {
                         context.pop();
-                        convertDocToPDF();
+                        convertDocToPDF(context);
                       },
                       title: "Create PDF"),
                   BottomSheetOptionsWidget(
@@ -172,25 +169,56 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
             context: context));
   }
 
-  void convertDocToPDF() async {
-    final pdf = pw.Document();
-    pdf.addPage(pw.Page(
-      pageFormat: PdfPageFormat.a4,
-      margin: pw.EdgeInsets.zero,
-      // theme: pw.ThemeData.withFont(
-      //   fontFallback: [globalFont!],
-      // ),
-      build: (context) {
-        var delta = _quillController?.document.toDelta();
-        pw.Widget dpdf = DeltaToPDF.toPDFWidget(delta!);
-        return dpdf;
+  void convertDocToPDF(BuildContext context) async {
+    showDialog(
+      context: context,
+      barrierDismissible:
+          true, // Prevent dismissing the dialog with a tap outside
+      builder: (BuildContext context) {
+        return Dialog(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              CircularProgressIndicator(), // Show a loading spinner
+              Text(
+                  "Converting document..."), // Optional: Add a text description
+            ],
+          ),
+        );
       },
-    ));
-    final output = await getApplicationDocumentsDirectory();
-    final file = File("${output.path}/${document?.title ?? "document"}.pdf");
-    // final file = File("${output.path}/$document.pdf");
-    await file.writeAsBytes(await pdf.save());
-    OpenAppFile.open("${output.path}/${document?.title ?? "document"}.pdf");
+    );
+
+    // try {
+    //   final pdf = pw.Document();
+    //   pdf.addPage(pw.Page(
+    //     pageFormat: PdfPageFormat.a4,
+    //     margin: pw.EdgeInsets.zero,
+    //     // theme: pw.ThemeData.withFont(
+    //     //   fontFallback: [globalFont!],
+    //     // ),
+    //     build: (context) {
+    //       var delta = _quillController?.document.toDelta();
+    //       pw.Widget dpdf = DeltaToPDF.toPDFWidget(delta!);
+    //       return dpdf;
+    //     },
+    //   ));
+    //   final output = await getApplicationDocumentsDirectory();
+    //   final file = File("${output.path}/${document?.title ?? "document"}.pdf");
+    //   // final file = File("${output.path}/$document.pdf");
+    //   await file.writeAsBytes(await pdf.save());
+
+    //   if (!mounted) return;
+    //   context.pop();
+    //   OpenAppFile.open("${output.path}/${document?.title ?? "document"}.pdf");
+    // } catch (e) {
+    //   context.pop();
+    //   FloatingSnackBar(
+    //       message: "Failed to open PDF",
+    //       backgroundColor: kPrimary,
+    //       duration: const Duration(seconds: 1),
+    //       textColor: kBlack,
+    //       context: context);
+    // }
   }
 
   @override
@@ -272,11 +300,11 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
                   decoration: BoxDecoration(
                       color: kBackground,
                       border: Border.all(color: kBlack, width: 2.0),
-                      borderRadius: BorderRadius.circular(12)),
+                      borderRadius: BorderRadius.circular(32)),
                   child: quill.QuillEditor.basic(
                     configurations: const quill.QuillEditorConfigurations(
                         readOnly: false,
-                        padding: EdgeInsets.all(8),
+                        padding: EdgeInsets.all(16),
                         showCursor: true),
                   ),
                 ),

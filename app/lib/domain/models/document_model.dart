@@ -5,7 +5,7 @@ class Document {
   final String title;
   final String uid;
   final DateTime createdAt;
-  final List content;
+  final List? content;
   final String id;
   final bool? isPublic;
   final List? collaborators;
