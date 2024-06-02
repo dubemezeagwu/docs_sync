@@ -107,7 +107,7 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
     });
   }
 
-  void addCollaborators(BuildContext context) {
+  void shareDocument(BuildContext context) {
     showModalBottomSheet(
       useSafeArea: true,
       context: context,
@@ -127,10 +127,6 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
                       icon: Icon(Icons.send),
                       onPressed: () {},
                       title: "Send Document"),
-                  // BottomSheetOptionsWidget(
-                  //     icon: Icon(Icons.download),
-                  //     onPressed: () {},
-                  //     title: "Download Document"),
                   BottomSheetOptionsWidget(
                       icon: Icon(Icons.file_copy),
                       onPressed: () {
@@ -140,7 +136,10 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
                       title: "Create PDF"),
                   BottomSheetOptionsWidget(
                       icon: Icon(Icons.person_add),
-                      onPressed: () {},
+                      onPressed: () {
+                        context.pop();
+                        addCollaborators(context);
+                      },
                       title: "Add collaborators"),
                   BottomSheetOptionsWidget(
                       icon: Icon(Icons.link),
@@ -221,6 +220,16 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
     // }
   }
 
+  void addCollaborators(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return Dialog(
+            child: CollaboratorsDialog(),
+          );
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     if (_quillController == null) {
@@ -268,7 +277,7 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
             padding: const EdgeInsets.all(10.0),
             child: ElevatedButton.icon(
                 onPressed: () {
-                  addCollaborators(context);
+                  shareDocument(context);
                 },
                 icon: const Icon(Icons.share),
                 label: const Text(AppStrings.share)),

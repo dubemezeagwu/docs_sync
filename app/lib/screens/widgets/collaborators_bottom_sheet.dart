@@ -1,17 +1,22 @@
 import "package:docs_sync/screens/app_screens.dart";
 
-class CollaboratorsBottomSheet extends ConsumerStatefulWidget {
-  const CollaboratorsBottomSheet({super.key});
+class CollaboratorsDialog extends ConsumerStatefulWidget {
+  const CollaboratorsDialog({super.key});
 
   @override
-  ConsumerState<CollaboratorsBottomSheet> createState() =>
-      _CollaboratorsBottomSheetState();
+  ConsumerState<CollaboratorsDialog> createState() =>
+      _CollaboratorsDialogState();
 }
 
-class _CollaboratorsBottomSheetState
-    extends ConsumerState<CollaboratorsBottomSheet> {
+class _CollaboratorsDialogState extends ConsumerState<CollaboratorsDialog> {
   final TextEditingController _controller = TextEditingController(text: "");
   CollaboratorType _type = CollaboratorType.viewer;
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,60 +24,38 @@ class _CollaboratorsBottomSheetState
       padding: const EdgeInsets.all(16.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
-        mainAxisSize: MainAxisSize.max,
+        mainAxisSize: MainAxisSize.min,
         children: [
-          32.kH,
-          const Text(
-            "Your collaborators",
-            style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.w600
-          ),
+          16.kH,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                "Your collaborators",
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+              ),
+              Icon(Icons.cancel_outlined,)
+            ],
           ),
           8.kH,
-          // do a circle avatar wrapped
           Wrap(
             children: [
-              ...List.generate(5, (index) => Column(
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Stack(
-                      children: [
-                        CircleAvatar(
-                          radius: 30,
-                          backgroundColor: kPrimary,
-                          child: ClipOval(),
-                        ),
-                        Positioned(
-                          right: 0,
-                          top: 0,
-                          child: Icon(Icons.cancel),
-                        ),
-                      ],
-                    ),
-                  ),
-                  4.kH,
-                  SizedBox(
-                    width: 75,
-                    child: const Text("Dubem Ezeagwu You", softWrap: true,))
-                ],
-              ),)
+              ...List.generate(
+                3,
+                (index) => const ViewCollaboratorWidget(),
+              )
             ],
           ),
           8.kH,
           const Text(
             "Add a collaborator",
-            style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.w600
-          ),
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
           ),
           Padding(
             padding: const EdgeInsets.only(top: 16.0),
             child: Row(
               children: [
-                Expanded(
+                Flexible(
                   flex: 5,
                   child: TextField(
                     controller: _controller,
@@ -87,7 +70,7 @@ class _CollaboratorsBottomSheetState
                 ),
                 8.kW,
                 Flexible(
-                  flex: 2,
+                  flex: 3,
                   child: DropdownButtonFormField(
                       isExpanded: true,
                       alignment: Alignment.center,
@@ -129,6 +112,49 @@ class _CollaboratorsBottomSheetState
           16.kH,
         ],
       ),
+    );
+  }
+}
+
+class ViewCollaboratorWidget extends StatelessWidget {
+  final Function()? onPressed;
+  const ViewCollaboratorWidget({
+    super.key,
+    this.onPressed,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Stack(
+            children: [
+              CircleAvatar(
+                radius: 30,
+                backgroundColor: kPrimary,
+                child: ClipOval(),
+              ),
+              Positioned(
+                right: 0,
+                top: 0,
+                child: InkWell(
+                  onTap: onPressed,
+                  child: const Icon(Icons.cancel),
+                ),
+              ),
+            ],
+          ),
+        ),
+        4.kH,
+        SizedBox(
+            width: 75,
+            child: const Text(
+              "Dubem Ezeagwu You",
+              softWrap: true,
+            ))
+      ],
     );
   }
 }
