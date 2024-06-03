@@ -244,18 +244,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                 Icons.person,
               ),
               title: const Text("Update Profile"),
-              onTap: () {
-                Navigator.pop(context);
-              },
+              onTap: () {},
             ),
             ListTile(
               leading: const Icon(
                 Icons.edit_document,
               ),
               title: const Text('My Documents'),
-              onTap: () {
-                Navigator.pop(context);
-              },
+              onTap: () {},
             ),
             AboutListTile(
               icon: const Icon(
@@ -292,7 +288,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
               textColor: kAlert,
               title: const Text('Delete Account'),
               onTap: () {
-                Navigator.pop(context);
+                context.pop();
               },
             ),
             16.kH
@@ -330,6 +326,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
 
   void deleteDocument(String docId, WidgetRef ref, BuildContext context) async {
     await ref.read(documentsNotifier.notifier).deleteDocument(docId);
+    if (!context.mounted) return;
     FloatingSnackBar(
         message: AppStrings.documentDeleted,
         backgroundColor: kPrimary,

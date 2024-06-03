@@ -27,10 +27,10 @@ class _CollaboratorsDialogState extends ConsumerState<CollaboratorsDialog> {
         mainAxisSize: MainAxisSize.min,
         children: [
           16.kH,
-          Row(
+          const Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
+              Text(
                 "Your collaborators",
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
               ),
@@ -118,6 +118,7 @@ class _CollaboratorsDialogState extends ConsumerState<CollaboratorsDialog> {
 
 class ViewCollaboratorWidget extends StatelessWidget {
   final Function()? onPressed;
+  
   const ViewCollaboratorWidget({
     super.key,
     this.onPressed,
@@ -148,9 +149,9 @@ class ViewCollaboratorWidget extends StatelessWidget {
           ),
         ),
         4.kH,
-        SizedBox(
+        const SizedBox(
             width: 75,
-            child: const Text(
+            child: Text(
               "Dubem Ezeagwu You",
               softWrap: true,
             ))
