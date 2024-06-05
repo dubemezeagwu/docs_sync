@@ -169,62 +169,44 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
   }
 
   void convertDocToPDF(BuildContext context) async {
-    showDialog(
-      context: context,
-      barrierDismissible:
-          true, // Prevent dismissing the dialog with a tap outside
-      builder: (BuildContext context) {
-        return Dialog(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              CircularProgressIndicator(), // Show a loading spinner
-              Text(
-                  "Converting document..."), // Optional: Add a text description
-            ],
-          ),
-        );
-      },
-    );
+    try {
+      final pdf = pw.Document();
+      pdf.addPage(pw.Page(
+        pageFormat: PdfPageFormat.a4,
+        margin: pw.EdgeInsets.zero,
+        // theme: pw.ThemeData.withFont(
+        //   fontFallback: [globalFont!],
+        // ),
+        build: (context) {
+          var delta = _quillController?.document.toDelta();
+          pw.Widget dpdf = DeltaToPDF.toPDFWidget(delta!);
+          return dpdf;
+        },
+      ));
+      final output = await getApplicationDocumentsDirectory();
+      final file = File("${output.path}/${document?.title ?? "document"}.pdf");
+      // final file = File("${output.path}/$document.pdf");
+      await file.writeAsBytes(await pdf.save());
 
-    // try {
-    //   final pdf = pw.Document();
-    //   pdf.addPage(pw.Page(
-    //     pageFormat: PdfPageFormat.a4,
-    //     margin: pw.EdgeInsets.zero,
-    //     // theme: pw.ThemeData.withFont(
-    //     //   fontFallback: [globalFont!],
-    //     // ),
-    //     build: (context) {
-    //       var delta = _quillController?.document.toDelta();
-    //       pw.Widget dpdf = DeltaToPDF.toPDFWidget(delta!);
-    //       return dpdf;
-    //     },
-    //   ));
-    //   final output = await getApplicationDocumentsDirectory();
-    //   final file = File("${output.path}/${document?.title ?? "document"}.pdf");
-    //   // final file = File("${output.path}/$document.pdf");
-    //   await file.writeAsBytes(await pdf.save());
-
-    //   if (!mounted) return;
-    //   context.pop();
-    //   OpenAppFile.open("${output.path}/${document?.title ?? "document"}.pdf");
-    // } catch (e) {
-    //   context.pop();
-    //   FloatingSnackBar(
-    //       message: "Failed to open PDF",
-    //       backgroundColor: kPrimary,
-    //       duration: const Duration(seconds: 1),
-    //       textColor: kBlack,
-    //       context: context);
-    // }
+      if (!context.mounted) return;
+      context.pop();
+      OpenAppFile.open("${output.path}/${document?.title ?? "document"}.pdf");
+    } catch (e) {
+      if (!context.mounted) return;
+      FloatingSnackBar(
+          message: "Failed to open PDF",
+          backgroundColor: kPrimary,
+          duration: const Duration(seconds: 1),
+          textColor: kBlack,
+          context: context);
+    }
   }
 
   void addCollaborators(BuildContext context) {
     showDialog(
         context: context,
         builder: (context) {
-          return Dialog(
+          return const Dialog(
             child: CollaboratorsDialog(),
           );
         });
@@ -327,6 +309,7 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
   }
 }
 
+// white overlay on the bottom sheet when visible
 class WhiteDragger extends StatelessWidget {
   const WhiteDragger({
     super.key,

@@ -27,21 +27,26 @@ class _CollaboratorsDialogState extends ConsumerState<CollaboratorsDialog> {
         mainAxisSize: MainAxisSize.min,
         children: [
           16.kH,
-          const Row(
+          Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
                 "Your collaborators",
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
               ),
-              Icon(Icons.cancel_outlined,)
+              InkWell(
+                onTap: () => context.pop(),
+                child: Icon(
+                  Icons.cancel_outlined,
+                ),
+              )
             ],
           ),
           8.kH,
           Wrap(
             children: [
               ...List.generate(
-                3,
+                6,
                 (index) => const ViewCollaboratorWidget(),
               )
             ],
@@ -118,7 +123,7 @@ class _CollaboratorsDialogState extends ConsumerState<CollaboratorsDialog> {
 
 class ViewCollaboratorWidget extends StatelessWidget {
   final Function()? onPressed;
-  
+
   const ViewCollaboratorWidget({
     super.key,
     this.onPressed,

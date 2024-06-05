@@ -6,7 +6,6 @@ export "constants/image_constants.dart";
 export "constants/screen_constants.dart";
 
 export "routes/app_routes.dart";
-export "routes/navigator_observer.dart";
 export "routes/router.dart";
 
 export "utils/time_helper.dart";
