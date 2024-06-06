@@ -36,8 +36,10 @@ class _CollaboratorsDialogState extends ConsumerState<CollaboratorsDialog> {
               ),
               InkWell(
                 onTap: () => context.pop(),
-                child: Icon(
-                  Icons.cancel_outlined,
+                child: SvgPicture.asset(
+                  AppAssets.cancelRounded,
+                  height: 25,
+                  width: 25,
                 ),
               )
             ],
@@ -147,7 +149,12 @@ class ViewCollaboratorWidget extends StatelessWidget {
                 top: 0,
                 child: InkWell(
                   onTap: onPressed,
-                  child: const Icon(Icons.cancel),
+                  child: SvgPicture.asset(
+                    AppAssets.cancel,
+                    height: 20,
+                    width: 20,
+                    color: kAlert,
+                  ),
                 ),
               ),
             ],

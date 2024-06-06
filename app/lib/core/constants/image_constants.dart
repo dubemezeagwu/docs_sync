@@ -12,4 +12,6 @@ class AppAssets {
   static const String globe = "assets/svg/globe.svg";
   static const String document = "assets/svg/document.svg";
   static const String delete = "assets/svg/delete.svg";
+  static const String cancel = "assets/svg/cancel.svg";
+  static const String cancelRounded = "assets/svg/cancel-rounded.svg";
 }
