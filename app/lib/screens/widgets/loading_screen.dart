@@ -8,7 +8,7 @@ class LoadingScreen extends StatelessWidget {
     return Scaffold(
       body: Center(
         child: SvgPicture.asset(
-          AppAssets.note,
+          AppAssets.noteEdit,
           width: 80,
           height: 80,
         ),

@@ -53,8 +53,18 @@ class DocumentListWidget extends StatelessWidget {
             ],
           ),
           trailing: isPublic == false
-              ? const Icon(Icons.lock)
-              : const Icon(CupertinoIcons.globe),
+              ? SvgPicture.asset(
+                  AppAssets.lock,
+                  height: 25,
+                  width: 25,
+                  color: kDarkGrey,
+                )
+              : SvgPicture.asset(
+                  AppAssets.globe,
+                  height: 25,
+                  width: 25,
+                  color: kDarkGrey,
+                ),
         ),
       ),
     );

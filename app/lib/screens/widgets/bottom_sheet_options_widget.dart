@@ -2,7 +2,7 @@ import 'package:docs_sync/screens/app_screens.dart';
 import 'package:docs_sync/screens/widgets/popup_button.dart';
 
 class BottomSheetOptionsWidget extends StatelessWidget {
-  final Icon icon;
+  final Widget icon;
   final VoidCallback onPressed;
   final String title;
 

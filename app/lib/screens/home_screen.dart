@@ -118,7 +118,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                       SizedBox(
                         height: 50,
                         width: 50,
-                        child: SvgPicture.asset(AppAssets.note),
+                        child: SvgPicture.asset(AppAssets.noteEdit),
                       ),
                       14.kH,
                       const Text(AppStrings.noDocs)
@@ -158,8 +158,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                       width: 50,
                       height: 50,
                       color: kDarkGrey,
-                      icon: const Icon(
-                        Icons.lock,
+                      icon: SvgPicture.asset(
+                        AppAssets.lock,
+                        height: 25,
+                        width: 25,
                         color: kWhite,
                       ),
                       onPressed: () {
@@ -181,8 +183,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                       width: 50,
                       height: 50,
                       color: kDarkGrey,
-                      icon: const Icon(
-                        CupertinoIcons.globe,
+                      icon: SvgPicture.asset(
+                        AppAssets.globe,
+                        height: 25,
+                        width: 25,
                         color: kWhite,
                       ),
                       onPressed: () {
@@ -240,27 +244,37 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
               decoration: const BoxDecoration(color: kPrimary),
             ),
             ListTile(
-              leading: const Icon(
-                Icons.person,
+              leading: SvgPicture.asset(
+                AppAssets.profile,
+                height: 25,
+                width: 25,
+                color: kDarkGrey,
               ),
               title: const Text("Update Profile"),
               onTap: () {},
             ),
             ListTile(
-              leading: const Icon(
-                Icons.edit_document,
+              leading: SvgPicture.asset(
+                AppAssets.document,
+                height: 25,
+                width: 25,
+                color: kDarkGrey,
               ),
               title: const Text('My Documents'),
               onTap: () {},
             ),
             AboutListTile(
-              icon: const Icon(
-                Icons.info,
+              icon: SvgPicture.asset(
+                AppAssets.info,
+                height: 25,
+                width: 25,
+                color: kDarkGrey,
               ),
               applicationIcon: SvgPicture.asset(
-                AppAssets.note,
+                AppAssets.noteEdit,
                 width: 50,
                 height: 50,
+
               ),
               applicationName: 'Docs Sync',
               applicationVersion: 'v1.0.0',
@@ -270,8 +284,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
             ),
             const Spacer(),
             ListTile(
-              leading: const Icon(
-                Icons.logout,
+              leading: SvgPicture.asset(
+                AppAssets.logout,
+                height: 25,
+                width: 25,
+                color: kAlert,
               ),
               title: const Text('Sign Out'),
               iconColor: kAlert,
@@ -281,8 +298,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
               },
             ),
             ListTile(
-              leading: const Icon(
-                Icons.delete,
+              leading: SvgPicture.asset(
+                AppAssets.delete,
+                height: 25,
+                width: 25,
+                color: kAlert,
               ),
               iconColor: kAlert,
               textColor: kAlert,

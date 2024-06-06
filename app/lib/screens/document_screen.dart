@@ -124,25 +124,45 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
                 alignment: WrapAlignment.center,
                 children: [
                   BottomSheetOptionsWidget(
-                      icon: Icon(Icons.send),
+                      icon: SvgPicture.asset(
+                        AppAssets.sent,
+                        height: 25,
+                        width: 25,
+                        color: kDarkGrey,
+                      ),
                       onPressed: () {},
                       title: "Send Document"),
                   BottomSheetOptionsWidget(
-                      icon: Icon(Icons.file_copy),
+                      icon: SvgPicture.asset(
+                        AppAssets.noteEdit,
+                        height: 25,
+                        width: 25,
+                        color: kDarkGrey,
+                      ),
                       onPressed: () {
                         context.pop();
                         convertDocToPDF(context);
                       },
                       title: "Create PDF"),
                   BottomSheetOptionsWidget(
-                      icon: Icon(Icons.person_add),
+                      icon: SvgPicture.asset(
+                        AppAssets.userAdd,
+                        height: 25,
+                        width: 25,
+                        color: kDarkGrey,
+                      ),
                       onPressed: () {
                         context.pop();
                         addCollaborators(context);
                       },
                       title: "Add collaborators"),
                   BottomSheetOptionsWidget(
-                      icon: Icon(Icons.link),
+                      icon: SvgPicture.asset(
+                        AppAssets.link,
+                        height: 25,
+                        width: 25,
+                        color: kDarkGrey,
+                      ),
                       onPressed: () {
                         context.pop();
                         copyLink();
@@ -189,7 +209,6 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
       await file.writeAsBytes(await pdf.save());
 
       if (!context.mounted) return;
-      context.pop();
       OpenAppFile.open("${output.path}/${document?.title ?? "document"}.pdf");
     } catch (e) {
       if (!context.mounted) return;
@@ -232,9 +251,9 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
         title: Row(
           children: [
             SvgPicture.asset(
-              AppAssets.note,
+              AppAssets.noteEdit,
               height: 25,
-              width: 10,
+              width: 25,
             ),
             const SizedBox(
               width: 8,
@@ -258,11 +277,22 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
           Padding(
             padding: const EdgeInsets.all(10.0),
             child: ElevatedButton.icon(
-                onPressed: () {
-                  shareDocument(context);
-                },
-                icon: const Icon(Icons.share),
-                label: const Text(AppStrings.share)),
+              onPressed: () {
+                shareDocument(context);
+              },
+              icon: SvgPicture.asset(
+                AppAssets.share,
+                height: 25,
+                width: 25,
+              ),
+              label: const Text(
+                AppStrings.share,
+                style: TextStyle(color: kBlack),
+              ),
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all<Color>(kPrimary)
+              ),
+            ),
           )
         ],
         bottom: PreferredSize(

@@ -4,7 +4,7 @@ class PopUpButton extends StatelessWidget {
   final double width;
   final double height;
   final Color color;
-  final Icon icon;
+  final Widget icon;
   final VoidCallback onPressed;
 
   const PopUpButton(
