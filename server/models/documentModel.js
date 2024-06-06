@@ -15,30 +15,35 @@ const collaboratorSchema = new mongoose.Schema(
   { _id: false },
 );
 
-const documentSchema = new mongoose.Schema({
-  uid: {
-    required: true,
-    type: String,
+const documentSchema = new mongoose.Schema(
+  {
+    uid: {
+      required: true,
+      type: String,
+    },
+    public: {
+      type: Boolean,
+      default: false,
+    },
+    createdAt: {
+      required: true,
+      type: Number,
+    },
+    title: {
+      required: true,
+      type: String,
+      trim: true,
+    },
+    content: {
+      type: Array,
+      default: [],
+    },
+    collaborators: [collaboratorSchema],
   },
-  public: {
-    type: Boolean,
-    default: false,
+  {
+    versionKey: false,
   },
-  createdAt: {
-    required: true,
-    type: Number,
-  },
-  title: {
-    required: true,
-    type: String,
-    trim: true,
-  },
-  content: {
-    type: Array,
-    default: [],
-  },
-  collaborators: [collaboratorSchema],
-});
+);
 
 // remove the __v field from the res
 // documentSchema.set("toJSON", {
