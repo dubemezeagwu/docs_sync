@@ -22,6 +22,13 @@ class _CollaboratorsDialogState extends ConsumerState<CollaboratorsDialog> {
         .addCollaborators(docId: docId, data: data);
   }
 
+  void removeCollaborator(
+      {required String docId, required String collaboratorId}) {
+    ref
+        .read(documentsNotifier.notifier)
+        .removeCollaborators(docId: docId, collaboratorId: collaboratorId);
+  }
+
   @override
   void dispose() {
     _controller.dispose();
@@ -69,7 +76,13 @@ class _CollaboratorsDialogState extends ConsumerState<CollaboratorsDialog> {
               ? Wrap(
                   children: [
                     ...(doc.collaborators ?? [])
-                        .map((e) => ViewCollaboratorWidget(title: e["uid"]))
+                        .map((e) => ViewCollaboratorWidget(
+                              title: e["uid"],
+                              onCancel: () {
+                                removeCollaborator(
+                                    docId: doc.id, collaboratorId: e["uid"]);
+                              },
+                            ))
                   ],
                 )
               : const SizedBox(

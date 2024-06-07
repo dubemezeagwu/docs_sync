@@ -97,7 +97,7 @@ exports.addCollaborators = catchAsync(async (req, res, next) => {
 exports.removeCollaborators = catchAsync(async (req, res, next) => {
   const { id, collaboratorId } = req.body;
 
-  const document = Document.findById(id);
+  const document = await Document.findById(id);
 
   if (!document) {
     return next(new AppError("No document found with that ID", 404));

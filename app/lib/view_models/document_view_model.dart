@@ -54,11 +54,21 @@ class DocumentViewModel extends AutoDisposeAsyncNotifier<List<Document>?> {
   }
 
   Future<void> addCollaborators(
-      {required String docId, required Map <String, dynamic> data}) async {
+      {required String docId, required Map<String, dynamic> data}) async {
     String? token = await ref.read(localStorageProvider).getToken();
     ref
         .read(documentRepositoryProvider)
         .addCollaborator(token: token ?? "", docId: docId, collaborator: data);
+    Future.delayed(const Duration(seconds: 1), () {
+      refresh();
+    });
+  }
+
+  Future<void> removeCollaborators(
+      {required String docId, required String collaboratorId}) async {
+    String? token = await ref.read(localStorageProvider).getToken();
+    ref.read(documentRepositoryProvider).removeCollaborator(
+        token: token ?? "", docId: docId, collaboratorId: collaboratorId);
     Future.delayed(const Duration(seconds: 1), () {
       refresh();
     });
