@@ -1,7 +1,10 @@
+import "package:docs_sync/domain/models/document_model.dart";
 import "package:docs_sync/screens/app_screens.dart";
+import "package:docs_sync/view_models/document_view_model.dart";
 
 class CollaboratorsDialog extends ConsumerStatefulWidget {
-  const CollaboratorsDialog({super.key});
+  final Document? document;
+  const CollaboratorsDialog({super.key, this.document});
 
   @override
   ConsumerState<CollaboratorsDialog> createState() =>
@@ -12,6 +15,13 @@ class _CollaboratorsDialogState extends ConsumerState<CollaboratorsDialog> {
   final TextEditingController _controller = TextEditingController(text: "");
   CollaboratorType _type = CollaboratorType.viewer;
 
+  void addCollaborator(
+      {required String docId, required Map<String, dynamic> data}) {
+    ref
+        .read(documentsNotifier.notifier)
+        .addCollaborators(docId: docId, data: data);
+  }
+
   @override
   void dispose() {
     _controller.dispose();
@@ -20,6 +30,8 @@ class _CollaboratorsDialogState extends ConsumerState<CollaboratorsDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final doc = ref.watch(documentsNotifier.select((value) =>
+        value.value?.firstWhere((doc) => doc.id == widget.document?.id)));
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
@@ -30,7 +42,7 @@ class _CollaboratorsDialogState extends ConsumerState<CollaboratorsDialog> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
+              const Text(
                 "Your collaborators",
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
               ),
@@ -45,14 +57,24 @@ class _CollaboratorsDialogState extends ConsumerState<CollaboratorsDialog> {
             ],
           ),
           8.kH,
-          Wrap(
-            children: [
-              ...List.generate(
-                6,
-                (index) => const ViewCollaboratorWidget(),
-              )
-            ],
-          ),
+          // Wrap(
+          //   children: <Widget>[
+          //     ...(doc!.collaborators ?? []).map((collaborator) =>
+          //         ViewCollaboratorWidget(title: collaborator["uid"]))
+          //   ],
+          // ),
+          (doc != null &&
+                  doc.collaborators != null &&
+                  doc.collaborators!.isNotEmpty)
+              ? Wrap(
+                  children: [
+                    ...(doc.collaborators ?? [])
+                        .map((e) => ViewCollaboratorWidget(title: e["uid"]))
+                  ],
+                )
+              : const SizedBox(
+                  child: Text("No collaborators currently"),
+                ),
           8.kH,
           const Text(
             "Add a collaborator",
@@ -73,6 +95,11 @@ class _CollaboratorsDialogState extends ConsumerState<CollaboratorsDialog> {
                           borderSide: BorderSide(color: kPrimary)),
                       contentPadding: EdgeInsets.only(left: 10),
                     ),
+                    onChanged: (value) {
+                      setState(() {
+                        _controller.text = value;
+                      });
+                    },
                   ),
                 ),
                 8.kW,
@@ -109,7 +136,12 @@ class _CollaboratorsDialogState extends ConsumerState<CollaboratorsDialog> {
           ),
           16.kH,
           ElevatedButton(
-            onPressed: () {},
+            onPressed: () {
+              addCollaborator(docId: doc?.id ?? "", data: {
+                "uid": _controller.text.toString(),
+                "role": _type.title,
+              });
+            },
             style: ElevatedButton.styleFrom(
                 backgroundColor: kPrimary,
                 minimumSize: const Size(150, 50),
@@ -124,11 +156,13 @@ class _CollaboratorsDialogState extends ConsumerState<CollaboratorsDialog> {
 }
 
 class ViewCollaboratorWidget extends StatelessWidget {
-  final Function()? onPressed;
+  final String title;
+  final Function()? onCancel;
 
   const ViewCollaboratorWidget({
     super.key,
-    this.onPressed,
+    this.onCancel,
+    required this.title,
   });
 
   @override
@@ -148,7 +182,7 @@ class ViewCollaboratorWidget extends StatelessWidget {
                 right: 0,
                 top: 0,
                 child: InkWell(
-                  onTap: onPressed,
+                  onTap: onCancel,
                   child: SvgPicture.asset(
                     AppAssets.cancel,
                     height: 20,
@@ -161,12 +195,13 @@ class ViewCollaboratorWidget extends StatelessWidget {
           ),
         ),
         4.kH,
-        const SizedBox(
-            width: 75,
-            child: Text(
-              "Dubem Ezeagwu You",
-              softWrap: true,
-            ))
+        SizedBox(
+          width: 75,
+          child: Text(
+            title,
+            softWrap: true,
+          ),
+        )
       ],
     );
   }

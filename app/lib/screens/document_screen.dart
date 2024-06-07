@@ -67,7 +67,7 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
   }
 
   void updateTitle(WidgetRef ref,
-      {required String docId, required String title}) async {
+      {required String docId, required String title}) {
     ref
         .read(documentsNotifier.notifier)
         .updateDocumentTitle(id: docId, title: title);
@@ -225,8 +225,8 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
     showDialog(
         context: context,
         builder: (context) {
-          return const Dialog(
-            child: CollaboratorsDialog(),
+          return Dialog(
+            child: CollaboratorsDialog(document: document,),
           );
         });
   }

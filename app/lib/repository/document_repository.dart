@@ -184,4 +184,39 @@ class DocumentRepository {
     }
     return data;
   }
+
+  void addCollaborator(
+      {required String token,
+      required String docId,
+      required Map<String, dynamic> collaborator}) async {
+    NetworkResponse<Document> data = NetworkResponse(
+        status: false, data: null, errorMessage: "");
+
+    try {
+      var response = await _client.patch(
+        Uri.parse("$host/api/v1/docs/addCollaborators"),
+        body: jsonEncode({
+          "id": docId,
+          "collaborators": [collaborator],
+        }),
+        headers: {
+          "Content-Type": "application/json; charset=UTF-8",
+          "Authorization": "Bearer $token"
+        },
+      );
+
+      switch (response.statusCode) {
+        case SERVER_OK:
+          final body = jsonDecode(response.body);
+          final documentJson = body["data"]["document"];
+          final document = Document.fromJson(documentJson);
+          data = NetworkResponse(data: document, status: true);
+          break;
+      }
+    } catch (e) {
+      data = NetworkResponse(
+          status: false, data: null, errorMessage: e.toString());
+      throw (e.toString());
+    }
+  }
 }
