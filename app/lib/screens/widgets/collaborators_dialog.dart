@@ -89,10 +89,10 @@ class _CollaboratorsDialogState extends ConsumerState<CollaboratorsDialog> {
                   child: Text("No collaborators currently"),
                 ),
           8.kH,
-          const Text(
-            "Add a collaborator",
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-          ),
+          // const Text(
+          //   "Add a collaborator",
+          //   style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+          // ),
           Padding(
             padding: const EdgeInsets.only(top: 16.0),
             child: Row(
@@ -101,12 +101,17 @@ class _CollaboratorsDialogState extends ConsumerState<CollaboratorsDialog> {
                   flex: 5,
                   child: TextField(
                     controller: _controller,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(
-                          borderSide: BorderSide(color: kBlack)),
+                    decoration: InputDecoration(
+                      hintText: "Enter a collaborator",
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: const BorderSide(color: kBlack, width: 2),
+                      ),
                       focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: kPrimary)),
-                      contentPadding: EdgeInsets.only(left: 10),
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: const BorderSide(color: kPrimary, width: 2),
+                      ),
+                      contentPadding: const EdgeInsets.only(left: 10),
                     ),
                     onChanged: (value) {
                       setState(() {
