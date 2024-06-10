@@ -1,7 +1,7 @@
 import 'package:docs_sync/screens/app_screens.dart';
 
-class LoadingScreen extends StatelessWidget {
-  const LoadingScreen({super.key});
+class SplashScreen extends StatelessWidget {
+  const SplashScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

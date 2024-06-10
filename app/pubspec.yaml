@@ -51,6 +51,7 @@ dependencies:
   pdf: ^3.10.8
   path_provider: ^2.1.0
   open_app_file: ^4.0.1
+  lottie: ^3.1.0
   # delta_to_pdf: ^0.0.7
   # flutter_quill: ^7.10.2
 
@@ -81,6 +82,7 @@ flutter:
   assets:
     - assets/svg/
     - assets/png/
+    - assets/json/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

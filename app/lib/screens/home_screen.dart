@@ -1,5 +1,6 @@
 import 'package:docs_sync/repository/app_repository.dart';
 import 'package:docs_sync/screens/app_screens.dart';
+import 'package:docs_sync/screens/widgets/lottie_animation_view.dart';
 import 'package:docs_sync/screens/widgets/popup_button.dart';
 import 'package:docs_sync/services/network_connection_checker.dart';
 import 'package:docs_sync/view_models/document_view_model.dart';
@@ -115,13 +116,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                   return Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      SizedBox(
-                        height: 50,
-                        width: 50,
-                        child: SvgPicture.asset(AppAssets.noteEdit),
-                      ),
+                      const SizedBox(
+                        height: 250,
+                        width: 250,
+                        child: EmptyContentsAnimationView()),
                       14.kH,
-                      const Text(AppStrings.noDocs)
+                      const Text(
+                        AppStrings.noDocs,
+                        style: TextStyle(
+                            fontSize: 14, fontWeight: FontWeight.w500),
+                      )
                     ],
                   );
                 }
@@ -133,7 +137,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
               }),
               loading: (() {
                 return const Center(
-                  child: CircularProgressIndicator(),
+                  child: SizedBox(
+                    height: 100,
+                    width: 100,
+                    child: LoadingContentsAnimationView()),
                 );
               }),
             ),
@@ -274,7 +281,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                 AppAssets.noteEdit,
                 width: 50,
                 height: 50,
-
               ),
               applicationName: 'Docs Sync',
               applicationVersion: 'v1.0.0',

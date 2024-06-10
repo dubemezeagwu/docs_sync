@@ -89,3 +89,7 @@ extension RadianFromDegrees on double {
     return this / unitRadian;
   }
 }
+
+extension GetFullPath on LottieAnimation {
+  String get fullPath => "assets/json/$name.json";
+}

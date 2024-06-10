@@ -10,7 +10,7 @@ class AppNavigator {
     final isAuthenticated = ref.watch(userProvider);
     return GoRouter(
       initialLocation: (appStatus == AppState.busy)
-          ? "/loading"
+          ? "/splash"
           : (isAuthenticated == null)
               ? "/"
               : "/home",
@@ -38,10 +38,10 @@ class AppNavigator {
           }),
         ),
         GoRoute(
-          path: "/loading",
-          name: AppRoutes.loading,
+          path: "/splash",
+          name: AppRoutes.splash,
           builder: (context, state) {
-            return const LoadingScreen();
+            return const SplashScreen();
           },
         ),
       ],
