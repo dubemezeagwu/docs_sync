@@ -18,7 +18,12 @@ class SocketRepository {
   }
 
   void autoSave(Map<String, dynamic> data) {
-    _socketClient.emit("save", data);
+    if (data.containsKey("content") && data["content"] != null) {
+      _socketClient.emit("save", data);
+    } else {
+      data["content"] = [];
+      _socketClient.emit("save", data);
+    }
   }
 
   void typing(Map<String, dynamic> data) {
@@ -29,4 +34,3 @@ class SocketRepository {
     _socketClient.on("changes", (data) => func(data));
   }
 }
-
