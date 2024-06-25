@@ -1,6 +1,7 @@
 import "package:docs_sync/domain/models/document_model.dart";
 import "package:docs_sync/screens/app_screens.dart";
 import "package:docs_sync/view_models/document_view_model.dart";
+import "package:flutter/material.dart";
 
 class CollaboratorsDialog extends ConsumerStatefulWidget {
   final Document? document;
@@ -19,14 +20,14 @@ class _CollaboratorsDialogState extends ConsumerState<CollaboratorsDialog> {
       {required String docId, required Map<String, dynamic> data}) {
     ref
         .read(documentsNotifier.notifier)
-        .addCollaborators(docId: docId, data: data);
+        .addCollaborators(docId: docId, data: data)
+        .then((_) => _controller.clear());
   }
 
   void removeCollaborator(
-      {required String docId, required String collaboratorId}) {
-    ref
-        .read(documentsNotifier.notifier)
-        .removeCollaborators(docId: docId, collaboratorId: collaboratorId);
+      {required String docId, required String collaboratorEmail}) {
+    ref.read(documentsNotifier.notifier).removeCollaborators(
+        docId: docId, collaboratorEmail: collaboratorEmail);
   }
 
   @override
@@ -64,35 +65,28 @@ class _CollaboratorsDialogState extends ConsumerState<CollaboratorsDialog> {
             ],
           ),
           8.kH,
-          // Wrap(
-          //   children: <Widget>[
-          //     ...(doc!.collaborators ?? []).map((collaborator) =>
-          //         ViewCollaboratorWidget(title: collaborator["uid"]))
-          //   ],
-          // ),
           (doc != null &&
                   doc.collaborators != null &&
                   doc.collaborators!.isNotEmpty)
               ? Wrap(
                   children: [
-                    ...(doc.collaborators ?? [])
-                        .map((e) => ViewCollaboratorWidget(
-                              title: e["uid"],
-                              onCancel: () {
-                                removeCollaborator(
-                                    docId: doc.id, collaboratorId: e["uid"]);
-                              },
-                            ))
+                    ...(doc.collaborators ?? []).map(
+                      (e) => ViewCollaboratorWidget(
+                        title: e["user"]["name"],
+                        image: e["user"]["profilePicture"],
+                        onCancel: () {
+                          removeCollaborator(
+                              docId: doc.id,
+                              collaboratorEmail: e["user"]["email"]);
+                        },
+                      ),
+                    ),
                   ],
                 )
               : const SizedBox(
                   child: Text("No collaborators currently"),
                 ),
           8.kH,
-          // const Text(
-          //   "Add a collaborator",
-          //   style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
-          // ),
           Padding(
             padding: const EdgeInsets.only(top: 16.0),
             child: Row(
@@ -101,15 +95,16 @@ class _CollaboratorsDialogState extends ConsumerState<CollaboratorsDialog> {
                   flex: 5,
                   child: TextField(
                     controller: _controller,
+                    keyboardType: TextInputType.emailAddress,
                     decoration: InputDecoration(
                       hintText: "Enter a collaborator",
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(color: kBlack, width: 2),
+                        borderSide: const BorderSide(color: kBlack, width: 1),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(color: kPrimary, width: 2),
+                        borderSide: const BorderSide(color: kPrimary, width: 1),
                       ),
                       contentPadding: const EdgeInsets.only(left: 10),
                     ),
@@ -156,7 +151,7 @@ class _CollaboratorsDialogState extends ConsumerState<CollaboratorsDialog> {
           ElevatedButton(
             onPressed: () {
               addCollaborator(docId: doc?.id ?? "", data: {
-                "uid": _controller.text.toString(),
+                "email": _controller.text.toString().trim(),
                 "role": _type.title,
               });
             },
@@ -174,12 +169,14 @@ class _CollaboratorsDialogState extends ConsumerState<CollaboratorsDialog> {
 }
 
 class ViewCollaboratorWidget extends StatelessWidget {
+  final String? image;
   final String title;
   final Function()? onCancel;
 
   const ViewCollaboratorWidget({
     super.key,
     this.onCancel,
+    this.image,
     required this.title,
   });
 
@@ -194,18 +191,32 @@ class ViewCollaboratorWidget extends StatelessWidget {
               CircleAvatar(
                 radius: 30,
                 backgroundColor: kPrimary,
-                child: ClipOval(),
+                child: ClipOval(
+                  child: Image.network(
+                    image ?? "",
+                    width: double.infinity,
+                    fit: BoxFit.fill,
+                  ),
+                ),
               ),
               Positioned(
                 right: 0,
                 top: 0,
                 child: InkWell(
+                  focusColor: kAlert,
                   onTap: onCancel,
-                  child: SvgPicture.asset(
-                    AppAssets.cancel,
+                  child: Container(
                     height: 20,
                     width: 20,
-                    color: kAlert,
+                    padding: EdgeInsets.all(4),
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle, color: kAlert.withOpacity(0.7)),
+                    child: SvgPicture.asset(
+                      AppAssets.cancel,
+                      height: 20,
+                      width: 20,
+                      color: kBlack,
+                    ),
                   ),
                 ),
               ),
@@ -214,10 +225,11 @@ class ViewCollaboratorWidget extends StatelessWidget {
         ),
         4.kH,
         SizedBox(
-          width: 75,
+          width: 50,
           child: Text(
             title,
             softWrap: true,
+            style: TextStyle(fontSize: 10),
           ),
         )
       ],

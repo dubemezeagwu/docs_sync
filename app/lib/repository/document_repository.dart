@@ -197,7 +197,7 @@ class DocumentRepository {
         Uri.parse("$host/api/v1/docs/addCollaborators"),
         body: jsonEncode({
           "id": docId,
-          "collaborators": [collaborator],
+          "collaborator": collaborator,
         }),
         headers: {
           "Content-Type": "application/json; charset=UTF-8",
@@ -223,7 +223,7 @@ class DocumentRepository {
   void removeCollaborator(
       {required String token,
       required String docId,
-      required String collaboratorId}) async {
+      required String collaboratorEmail}) async {
     NetworkResponse<Document> data = NetworkResponse(
         status: false, data: null, errorMessage: "");
 
@@ -232,7 +232,7 @@ class DocumentRepository {
         Uri.parse("$host/api/v1/docs/removeCollaborators"),
         body: jsonEncode({
           "id": docId,
-          "collaboratorId": collaboratorId,
+          "collaboratorEmail": collaboratorEmail,
         }),
         headers: {
           "Content-Type": "application/json; charset=UTF-8",

@@ -65,10 +65,10 @@ class DocumentViewModel extends AutoDisposeAsyncNotifier<List<Document>?> {
   }
 
   Future<void> removeCollaborators(
-      {required String docId, required String collaboratorId}) async {
+      {required String docId, required String collaboratorEmail}) async {
     String? token = await ref.read(localStorageProvider).getToken();
     ref.read(documentRepositoryProvider).removeCollaborator(
-        token: token ?? "", docId: docId, collaboratorId: collaboratorId);
+        token: token ?? "", docId: docId, collaboratorEmail: collaboratorEmail);
     Future.delayed(const Duration(seconds: 1), () {
       refresh();
     });
