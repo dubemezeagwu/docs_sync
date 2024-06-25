@@ -1,4 +1,5 @@
 const Document = require("./../models/documentModel");
+const User = require("./../models/userModel");
 const catchAsync = require("./../utils/catchAsync");
 const AppError = require("./../utils/appError");
 
@@ -71,20 +72,35 @@ exports.updateDocumentTitle = catchAsync(async (req, res, next) => {
 });
 
 exports.addCollaborators = catchAsync(async (req, res, next) => {
-  const { id, collaborators } = req.body;
+  const { id, collaborator } = req.body;
 
-  const document = await Document.findById(id).select("-__v");
+  let document = await Document.findById(id).select("-__v");
 
   if (!document) {
     return next(new AppError("No document found with that ID", 404));
   }
 
-  document.collaborators = collaborators.map((collaborator) => ({
-    uid: collaborator.uid,
+  const user = await User.findOne({ email: collaborator.email });
+
+  if (!user) {
+    return next(new AppError("No user found with that email", 404));
+  }
+
+  const newCollaborator = {
+    user: user._id,
     role: collaborator.role || "viewer",
-  }));
+  };
+
+  document.collaborators.push(newCollaborator);
 
   await document.save();
+
+  // document = await document
+  //   .populate({
+  //     path: "collaborators.user",
+  //     select: "name email profilePicture",
+  //   })
+  //   .execPopulate();
 
   res.status(200).json({
     status: "success",
@@ -95,16 +111,22 @@ exports.addCollaborators = catchAsync(async (req, res, next) => {
 });
 
 exports.removeCollaborators = catchAsync(async (req, res, next) => {
-  const { id, collaboratorId } = req.body;
+  const { id, collaboratorEmail } = req.body;
 
-  const document = await Document.findById(id);
+  const document = await Document.findById(id).select("-__v");
 
   if (!document) {
     return next(new AppError("No document found with that ID", 404));
   }
 
+  const user = await User.findOne({ email: collaboratorEmail });
+
+  if (!user) {
+    return next(new AppError("No user found with that email", 404));
+  }
+
   document.collaborators = document.collaborators.filter(
-    (collaborator) => collaborator.uid !== collaboratorId,
+    (collaborator) => collaborator.user._id.toString() !== user._id.toString(),
   );
 
   await document.save();
@@ -126,6 +148,7 @@ exports.getDocumentById = catchAsync(async (req, res, next) => {
   if (!document) {
     return next(new AppError("No document exists/matches that id", 404));
   }
+
   res.status(200).json({
     status: "success",
     data: {

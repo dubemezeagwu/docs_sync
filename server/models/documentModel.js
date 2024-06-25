@@ -1,20 +1,5 @@
 const mongoose = require("mongoose");
 
-const collaboratorSchema = new mongoose.Schema(
-  {
-    uid: {
-      type: String,
-      required: true,
-    },
-    role: {
-      type: String,
-      enum: ["viewer", "editor"],
-      default: "viewer",
-    },
-  },
-  { _id: false },
-);
-
 const documentSchema = new mongoose.Schema(
   {
     uid: {
@@ -38,22 +23,34 @@ const documentSchema = new mongoose.Schema(
       type: Array,
       default: [],
     },
-    collaborators: [collaboratorSchema],
+    collaborators: [
+      {
+        _id: false,
+        user: {
+          type: mongoose.Schema.ObjectId,
+          ref: "User",
+          required: true,
+        },
+        role: {
+          type: String,
+          enum: ["viewer", "editor"],
+          default: "viewer",
+        },
+      },
+    ],
   },
   {
     versionKey: false,
   },
 );
 
-// remove the __v field from the res
-// documentSchema.set("toJSON", {
-//   transform: function (doc, ret) {
-//     ret.id = ret._id.toString();
-//     delete ret._id;
-//     delete ret.__v;
-//     return ret;
-//   },
-// });
+documentSchema.pre(/^find/, function (next) {
+  this.populate({
+    path: "collaborators.user",
+    select: "name email profilePicture",
+  });
+  next();
+});
 
 documentSchema.pre("save", function (next) {
   if (!this.public && this.collaborators.length > 0) {
