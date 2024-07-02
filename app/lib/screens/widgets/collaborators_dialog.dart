@@ -192,11 +192,11 @@ class ViewCollaboratorWidget extends StatelessWidget {
                 radius: 30,
                 backgroundColor: kPrimary,
                 child: ClipOval(
-                  child: Image.network(
-                    image ?? "",
-                    width: double.infinity,
-                    fit: BoxFit.fill,
-                  ),
+                  child: CachedNetworkImage(
+                      imageUrl: image ?? "",
+                      fit: BoxFit.cover,
+                      width: double.infinity,
+                    )
                 ),
               ),
               Positioned(

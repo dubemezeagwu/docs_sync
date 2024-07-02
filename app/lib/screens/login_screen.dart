@@ -38,7 +38,7 @@ class LoginScreen extends ConsumerWidget {
       context.goNamed(AppRoutes.home);
     } else {
       scaffoldMessenger
-          .showSnackBar(SnackBar(content: Text(data.errorMessage!)));
+          .showSnackBar(SnackBar(content: Text(data.errorMessage!, style: TextStyle(color: kAlert),)));
     }
   }
 }

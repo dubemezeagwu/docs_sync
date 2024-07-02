@@ -1,5 +1,6 @@
 import 'package:docs_sync/repository/app_repository.dart';
 import 'package:docs_sync/screens/app_screens.dart';
+import 'package:docs_sync/screens/update_profile_screen.dart';
 
 class AppNavigator {
   AppNavigator._();
@@ -42,6 +43,13 @@ class AppNavigator {
           name: AppRoutes.splash,
           builder: (context, state) {
             return const SplashScreen();
+          },
+        ),
+        GoRoute(
+          path: "/updateProfile",
+          name: AppRoutes.updateProfile,
+          builder: (context, state) {
+            return const UpdateProfileScreen();
           },
         ),
       ],

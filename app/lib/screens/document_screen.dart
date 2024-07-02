@@ -1,12 +1,16 @@
 import 'dart:async';
 
+import 'package:avatar_glow/avatar_glow.dart';
 import 'package:docs_sync/domain/app_domain.dart';
 import 'package:docs_sync/repository/app_repository.dart';
 import 'package:docs_sync/screens/app_screens.dart';
 import 'package:docs_sync/screens/widgets/bottom_sheet_options_widget.dart';
+import 'package:docs_sync/screens/widgets/lottie_animation_view.dart';
 import 'package:docs_sync/view_models/document_view_model.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart' as quill;
 import 'package:pdf/widgets.dart' as pw;
+import 'package:speech_to_text/speech_to_text.dart' as stt;
 
 class DocumentScreen extends ConsumerStatefulWidget {
   final String id;
@@ -27,6 +31,10 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
   Document? document;
   SocketRepository socketRepository = SocketRepository();
   Timer? _timer;
+  final stt.SpeechToText _speech = stt.SpeechToText();
+  bool _isListening = false;
+  String _micText = "Press the button and start speaking";
+  double _confidence = 1.0;
 
   @override
   void initState() {
@@ -144,18 +152,21 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
                         convertDocToPDF(context);
                       },
                       title: "Create PDF"),
-                  BottomSheetOptionsWidget(
-                      icon: SvgPicture.asset(
-                        AppAssets.userAdd,
-                        height: 25,
-                        width: 25,
-                        color: kDarkGrey,
-                      ),
-                      onPressed: () {
-                        context.pop();
-                        addCollaborators(context);
-                      },
-                      title: "Add collaborators"),
+                  Visibility(
+                    visible: document!.isPublic ?? true,
+                    child: BottomSheetOptionsWidget(
+                        icon: SvgPicture.asset(
+                          AppAssets.userAdd,
+                          height: 25,
+                          width: 25,
+                          color: kDarkGrey,
+                        ),
+                        onPressed: () {
+                          context.pop();
+                          addCollaborators(context);
+                        },
+                        title: "Add collaborators"),
+                  ),
                   BottomSheetOptionsWidget(
                       icon: SvgPicture.asset(
                         AppAssets.link,
@@ -226,9 +237,38 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
         context: context,
         builder: (context) {
           return Dialog(
-            child: CollaboratorsDialog(document: document,),
+            child: CollaboratorsDialog(
+              document: document,
+            ),
           );
         });
+  }
+
+  
+
+  void listen() async {
+    if (!_isListening) {
+      bool available = await _speech.initialize(
+        onError: (val) => print("onError: ${val.errorMsg}"),
+        onStatus: (status) => print("onStatus: $status"),
+      );
+      if (available) {
+        setState(() => _isListening = true);
+        await _speech.listen(
+          onResult: (val) => setState(() {
+            _micText = val.recognizedWords;
+            if (val.hasConfidenceRating && val.confidence > 0) {
+              _confidence = val.confidence;
+            }
+            print("onResult: ${val.recognizedWords}");
+          }),
+        );
+        
+      }
+    } else {
+      setState(() => _isListening = false);
+      await _speech.stop();
+    }
   }
 
   @override
@@ -236,7 +276,8 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
     if (_quillController == null) {
       return const Scaffold(
         body: Center(
-          child: CircularProgressIndicator(),
+          child: SizedBox(
+              height: 100, width: 100, child: LoadingContentsAnimationView()),
         ),
       );
     }
@@ -290,8 +331,7 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
                 style: TextStyle(color: kBlack),
               ),
               style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all<Color>(kPrimary)
-              ),
+                  backgroundColor: MaterialStateProperty.all<Color>(kPrimary)),
             ),
           )
         ],
@@ -299,7 +339,7 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
           preferredSize: const Size.fromHeight(1),
           child: Container(
             decoration:
-                BoxDecoration(border: Border.all(color: kDarkGrey, width: 0.1)),
+                BoxDecoration(border: Border.all(color: kDarkGrey, width: 0.7)),
           ),
         ),
       ),
@@ -333,6 +373,17 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
               8.kH,
             ],
           ),
+        ),
+      ),
+      floatingActionButton: AvatarGlow(
+        animate: _isListening,
+        glowColor: kBlack,
+        child: FloatingActionButton(
+          onPressed: () {
+            listen();
+          },
+          // onPressed: listen,
+          child: Icon(_isListening ? Icons.mic : Icons.mic_none),
         ),
       ),
     );

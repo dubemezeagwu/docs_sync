@@ -1,7 +1,5 @@
 import 'package:docs_sync/repository/app_repository.dart';
 import 'package:docs_sync/screens/app_screens.dart';
-import 'package:docs_sync/screens/widgets/lottie_animation_view.dart';
-import 'package:docs_sync/screens/widgets/popup_button.dart';
 import 'package:docs_sync/services/network_connection_checker.dart';
 import 'package:docs_sync/view_models/document_view_model.dart';
 import 'package:flutter/cupertino.dart';
@@ -56,8 +54,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                   radius: 20,
                   backgroundColor: kPrimary,
                   child: ClipOval(
-                    child: Image.network(
-                      userData!.profilePicture,
+                    // child: Image.network(
+                    //   userData!.profilePicture,
+                    //   fit: BoxFit.cover,
+                    // ),
+                    child: CachedNetworkImage(
+                      imageUrl: userData!.profilePicture,
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -117,9 +119,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const SizedBox(
-                        height: 250,
-                        width: 250,
-                        child: EmptyContentsAnimationView()),
+                          height: 250,
+                          width: 250,
+                          child: EmptyContentsAnimationView()),
                       14.kH,
                       const Text(
                         AppStrings.noDocs,
@@ -138,9 +140,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
               loading: (() {
                 return const Center(
                   child: SizedBox(
-                    height: 100,
-                    width: 100,
-                    child: LoadingContentsAnimationView()),
+                      height: 100,
+                      width: 100,
+                      child: LoadingContentsAnimationView()),
                 );
               }),
             ),
@@ -153,55 +155,23 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
             child: Stack(
               alignment: Alignment.bottomRight,
               children: [
-                Transform.translate(
-                  offset: Offset.fromDirection(
-                      195.0.rad, degOneTranslationAnimation.value * 100),
-                  child: Transform(
-                    transform: Matrix4.rotationZ(
-                        (rotationAnimation.value as double).rad)
-                      ..scale(degOneTranslationAnimation.value),
-                    alignment: Alignment.center,
-                    child: PopUpButton(
-                      width: 50,
-                      height: 50,
-                      color: kDarkGrey,
-                      icon: SvgPicture.asset(
-                        AppAssets.lock,
-                        height: 25,
-                        width: 25,
-                        color: kWhite,
-                      ),
-                      onPressed: () {
-                        animationController.reverse();
-                        return createDocument(context, ref, false);
-                      },
-                    ),
-                  ),
+                transformTranslateWidget(
+                  context,
+                  distance: 195.0,
+                  iconPath: AppAssets.lock,
+                  onPressed: () {
+                    animationController.reverse();
+                    return createDocument(context, ref, false);
+                  },
                 ),
-                Transform.translate(
-                  offset: Offset.fromDirection(
-                      255.0.rad, degOneTranslationAnimation.value * 100),
-                  child: Transform(
-                    transform: Matrix4.rotationZ(
-                        (rotationAnimation.value as double).rad)
-                      ..scale(degOneTranslationAnimation.value),
-                    alignment: Alignment.center,
-                    child: PopUpButton(
-                      width: 50,
-                      height: 50,
-                      color: kDarkGrey,
-                      icon: SvgPicture.asset(
-                        AppAssets.globe,
-                        height: 25,
-                        width: 25,
-                        color: kWhite,
-                      ),
-                      onPressed: () {
-                        animationController.reverse();
-                        return createDocument(context, ref, true);
-                      },
-                    ),
-                  ),
+                transformTranslateWidget(
+                  context,
+                  distance: 255.0,
+                  iconPath: AppAssets.globe,
+                  onPressed: () {
+                    animationController.reverse();
+                    return createDocument(context, ref, true);
+                  },
                 ),
                 Transform(
                   transform: Matrix4.rotationZ(
@@ -242,11 +212,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
               currentAccountPicture: CircleAvatar(
                 radius: 40,
                 child: ClipOval(
-                  child: Image.network(
-                    userData!.profilePicture,
-                    fit: BoxFit.cover,
-                  ),
-                ),
+                    child: CachedNetworkImage(
+                  imageUrl: userData.profilePicture,
+                  fit: BoxFit.cover,
+                )),
               ),
               decoration: const BoxDecoration(color: kPrimary),
             ),
@@ -258,7 +227,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                 color: kDarkGrey,
               ),
               title: const Text("Update Profile"),
-              onTap: () {},
+              onTap: () {
+                context.pushNamed(AppRoutes.updateProfile);
+              },
             ),
             ListTile(
               leading: SvgPicture.asset(
@@ -319,6 +290,34 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
             ),
             16.kH
           ],
+        ),
+      ),
+    );
+  }
+
+  Transform transformTranslateWidget(BuildContext context,
+      {required double distance,
+      required String iconPath,
+      required VoidCallback onPressed}) {
+    return Transform.translate(
+      offset: Offset.fromDirection(
+          distance.rad, degOneTranslationAnimation.value * 100),
+      child: Transform(
+        transform: Matrix4.rotationZ((rotationAnimation.value as double).rad)
+          ..scale(degOneTranslationAnimation.value),
+        alignment: Alignment.center,
+        child: PopUpButton(
+          width: 50,
+          height: 50,
+          color: kDarkGrey,
+          icon: SvgPicture.asset(
+            iconPath,
+            height: 25,
+            width: 25,
+            color: kWhite,
+          ),
+          onPressed: onPressed,
+
         ),
       ),
     );

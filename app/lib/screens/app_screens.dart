@@ -26,3 +26,7 @@ export 'package:pdf/pdf.dart';
 export 'package:open_app_file/open_app_file.dart';
 export 'package:path_provider/path_provider.dart';
 export 'package:lottie/lottie.dart';
+export 'package:cached_network_image/cached_network_image.dart';
+export 'package:docs_sync/screens/widgets/lottie_animation_view.dart';
+export 'package:docs_sync/screens/widgets/popup_button.dart';
+
