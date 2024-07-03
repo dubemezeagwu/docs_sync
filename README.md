@@ -73,3 +73,11 @@ Contributions to improve the functionality and performance of `docs_sync` are we
 This project is licensed under the MIT License. See the LICENSE file for more details.
 
 ## Screenshots
+<img src="app/screenshots/1.png" alt="HOME SCREEN 1" width="200" align="left"/>
+<img src="app/screenshots/2.png" alt="HOME SCREEN 2" width="200" align="left"/>
+<img src="app/screenshots/3.png" alt="SIDE DRAWER" width="200" align="left"/>
+<img src="app/screenshots/4.png" alt="VIEW DOC 1" width="200" align="left"/>
+<img src="app/screenshots/5.png" alt="VIEW DOC 2" width="200" align="left"/>
+<img src="app/screenshots/6.png" alt="OPTIONS 1" width="200" align="left"/>
+<img src="app/screenshots/7.png" alt="OPTIONS 2" width="200" align="left"/>
+<img src="app/screenshots/8.png" alt="COLLABORATION" width="200" align="left"/>
